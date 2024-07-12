@@ -9,6 +9,7 @@
           v-model="searchTerm"
           id="dropdownSearchInput"
           class="inputWrapper"
+          :style="{ border: inputStyles }"
           type="text"
           :placeholder="
             selectedData.length > 0
@@ -21,6 +22,7 @@
           v-show="isOpen && filteredData.length > 0"
           class="listContainer"
           aria-labelledby="dropdownSearchInput"
+          :style="{ 'background-color': listBackgroundColor }"
         >
           <li v-for="(option, index) in filteredData" :key="index">
             <div class="listBox">
@@ -58,7 +60,8 @@ const props = defineProps({
     required: true
   },
   labelName: {
-    type: String
+    type: String,
+    default: null
   },
   searchTermProp: {
     type: String,
@@ -66,7 +69,7 @@ const props = defineProps({
   },
   isOpenProp: {
     type: Boolean,
-    required: true
+    required: false
   },
   displayKey: {
     type: String,
@@ -80,10 +83,6 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  modelValue: {
-    type: Array,
-    default: () => []
-  },
   countCondition: {
     type: Number,
     default: null
@@ -91,6 +90,18 @@ const props = defineProps({
   defaultValue: {
     type: [Object, Array],
     default: () => []
+  },
+  listBackgroundColor: {
+    type: String,
+    default: '#e5e7eb'
+  },
+  inputBorderColour: {
+    type: String,
+    default: '1px solid gray'
+  },
+  inputFocusBorderColor: {
+    type: String,
+    default: '1px solid #6a7ada'
   }
 })
 
@@ -106,6 +117,10 @@ watch(selectedData, (newValue: string | object) => {
   emit('update:modelValue', newValue)
 })
 
+const inputStyles = computed(() =>
+  isOpen.value === true ? props.inputFocusBorderColor : props.inputBorderColour
+)
+
 const filteredData = computed(() => {
   return props.data.filter((option: Option) => {
     return Object.values(option).some((value) =>
@@ -114,7 +129,7 @@ const filteredData = computed(() => {
   })
 })
 
-const handleInput = (event: InputEvent) => {
+const handleInput = (event: Event) => {
   searchTerm.value = (event.target as HTMLInputElement).value
 }
 
@@ -205,6 +220,7 @@ const pluralize = (word: string, count: number) => {
   color: #9ca3af;
   border: 1px solid #d1d5db;
   width: 100%;
+  outline: none;
 }
 
 .listContainer {
@@ -213,7 +229,6 @@ const pluralize = (word: string, count: number) => {
   left: 0;
   z-index: 10;
   width: 100%;
-  background-color: lightgrey;
   border-width: 1px #d1d5db;
   border-radius: 0.5rem;
   box-shadow: #0000;
@@ -235,7 +250,7 @@ const pluralize = (word: string, count: number) => {
 }
 
 .listBox:hover {
-  background: #e5e7eb;
+  background: #ecedef;
 }
 
 .listInput {
