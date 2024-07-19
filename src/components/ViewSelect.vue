@@ -2,7 +2,7 @@
   <div>
     <SearchSelect
       :data="pseudoEmployeeData"
-      labelName="Employee"
+      placeholderName="Employee"
       :searchTermProp="searchTerm"
       :is-open-prop="isOpen"
       display-key="firstName lastName | employeeId"

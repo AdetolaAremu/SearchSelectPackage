@@ -4,8 +4,8 @@
       <div :class="{ 'z-10': isOpen }" id="dropdownSearch" class="searchContainer">
         <input
           @input="handleInput"
-          @click="toggleDropdown()"
           @focus="isOpen = true"
+          @blur="searchTerm = ''"
           v-model="searchTerm"
           id="dropdownSearchInput"
           class="inputWrapper"
@@ -14,7 +14,7 @@
           :placeholder="
             selectedData.length > 0
               ? selectedData.length.toString() +
-                ` ${pluralize(labelName, selectedData.length)} Selected`
+                ` ${pluralize(placeholderName, selectedData.length)} Selected`
               : 'Search...'
           "
         />
@@ -50,16 +50,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch, type PropType } from 'vue'
 
-type Option = { [key: string]: unknown }
+type Option<T = unknown> = { id: T; [key: string]: unknown }
 
 const props = defineProps({
   data: {
-    type: Array<Option>,
+    type: Array as PropType<Option[] | any>,
     required: true
   },
-  labelName: {
+  placeholderName: {
     type: String,
     default: null
   },
@@ -73,10 +73,6 @@ const props = defineProps({
   },
   displayKey: {
     type: String,
-    required: true
-  },
-  toggleDropdown: {
-    type: Function,
     required: true
   },
   separator: {
@@ -106,6 +102,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+
 const selectedData = ref(
   Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
 )
@@ -114,12 +111,13 @@ const isOpen = ref(props.isOpenProp)
 const dropdown = ref<HTMLElement | null>(null)
 
 watch(selectedData, (newValue: string | object) => {
-  emit('update:modelValue', newValue)
+  if (Array.isArray(newValue)) {
+    const getValue = newValue.map((item) => item.id)
+    emit('update:modelValue', getValue)
+  } else {
+    emit('update:modelValue', newValue)
+  }
 })
-
-const inputStyles = computed(() =>
-  isOpen.value === true ? props.inputFocusBorderColor : props.inputBorderColour
-)
 
 const filteredData = computed(() => {
   return props.data.filter((option: Option) => {
@@ -132,6 +130,10 @@ const filteredData = computed(() => {
 const handleInput = (event: Event) => {
   searchTerm.value = (event.target as HTMLInputElement).value
 }
+
+const inputStyles = computed(() =>
+  isOpen.value === true ? props.inputFocusBorderColor : props.inputBorderColour
+)
 
 const getDisplayValue = (option: { [key: string]: any }, displayKey: string) => {
   return displayKey
