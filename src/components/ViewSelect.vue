@@ -3,10 +3,7 @@
     <SearchSelect
       :data="pseudoEmployeeData"
       placeholderName="Employee"
-      :searchTermProp="searchTerm"
-      :is-open-prop="isOpen"
-      display-key="firstName lastName | employeeId"
-      :toggle-dropdown="toggleDropdown"
+      display-key="firstName lastName - employeeId"
       :countCondition="2"
       v-model="employee"
     />
@@ -17,13 +14,7 @@
 import { ref } from 'vue'
 import SearchSelect from './SearchSelect.vue'
 
-const searchTerm = ref('')
 const employee = ref('')
-const isOpen = ref(false)
-
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value
-}
 
 interface IAllEmployees {
   firstName: string

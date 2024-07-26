@@ -63,21 +63,9 @@ const props = defineProps({
     type: String,
     default: null
   },
-  searchTermProp: {
-    type: String,
-    required: true
-  },
-  isOpenProp: {
-    type: Boolean,
-    required: false
-  },
   displayKey: {
     type: String,
     required: true
-  },
-  separator: {
-    type: String,
-    default: ''
   },
   countCondition: {
     type: Number,
@@ -106,17 +94,12 @@ const emit = defineEmits(['update:modelValue'])
 const selectedData = ref(
   Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
 )
-const searchTerm = ref(props.searchTermProp)
-const isOpen = ref(props.isOpenProp)
+const searchTerm = ref('')
+const isOpen = ref()
 const dropdown = ref<HTMLElement | null>(null)
 
 watch(selectedData, (newValue: string | object) => {
-  if (Array.isArray(newValue)) {
-    const getValue = newValue.map((item) => item.id)
-    emit('update:modelValue', getValue)
-  } else {
-    emit('update:modelValue', newValue)
-  }
+  emit('update:modelValue', newValue)
 })
 
 const filteredData = computed(() => {
@@ -136,10 +119,7 @@ const inputStyles = computed(() =>
 )
 
 const getDisplayValue = (option: { [key: string]: any }, displayKey: string) => {
-  return displayKey
-    .split(' ')
-    .map((key) => option[key])
-    .join(' ')
+  return displayKey.replace(/\b(\w+)\b/g, (match) => option[match] || match)
 }
 
 const onClickOutside = (element: HTMLElement, cb: () => void): void => {
