@@ -86,6 +86,10 @@ const props = defineProps({
   inputFocusBorderColor: {
     type: String,
     default: '1px solid #6a7ada'
+  },
+  primaryKey: {
+    type: [String, Number],
+    required: true
   }
 })
 
@@ -98,8 +102,26 @@ const searchTerm = ref('')
 const isOpen = ref()
 const dropdown = ref<HTMLElement | null>(null)
 
+const selectDefaultItems = () => {
+  if (props.defaultValue) {
+    const defaultValues = Array.isArray(props.defaultValue)
+      ? props.defaultValue
+      : [props.defaultValue]
+
+    const defaultSelection = props.data.filter((item: Option) =>
+      defaultValues.some((value) => value === item[props.primaryKey])
+    )
+
+    selectedData.value = defaultSelection
+  }
+}
+
 watch(selectedData, (newValue: string | object) => {
-  emit('update:modelValue', newValue)
+  if (Array.isArray(newValue)) {
+    const getValue = newValue.map((item) => item[props.primaryKey])
+    emit('update:modelValue', getValue)
+    console.log(getValue)
+  }
 })
 
 const filteredData = computed(() => {
@@ -146,6 +168,8 @@ onMounted(() => {
       cleanup
     })
   }
+
+  selectDefaultItems()
 })
 
 const pluralize = (word: string, count: number) => {

@@ -6,6 +6,8 @@
       display-key="firstName lastName - employeeId"
       :countCondition="2"
       v-model="employee"
+      primary-key="firstName"
+      :default-value="['James']"
     />
   </div>
 </template>
@@ -14,7 +16,7 @@
 import { ref } from 'vue'
 import SearchSelect from './SearchSelect.vue'
 
-const employee = ref('')
+const employee = ref([''])
 
 interface IAllEmployees {
   firstName: string
