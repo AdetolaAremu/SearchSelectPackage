@@ -14,13 +14,14 @@ npm install searchselect-component
 
 ```js
  <SearchSelect
-    :data="pseudoEmployeeData"
-    placeholderName="Employee"
-    :searchTermProp="searchTerm"
-    :isOpenProp="isOpen"
-    display-key="firstName lastName"
-    v-model="employee"
-  />
+      :data="pseudoEmployeeData"
+      placeholderName="Employee"
+      displayKey="firstName lastName - employeeId"
+      :countCondition="2" // optional
+      v-model="employee"
+      primaryKey="employeeId"
+      :defaultValue="['emp-0001']" // optional
+    />
 ```
 
 ## Explanations
@@ -29,16 +30,22 @@ npm install searchselect-component
 
 - placeholderName: This is what is attached to the count of the things you will pick in the input box e.g 2 Employee Selected. Take note of the "**Employee** that was passed to the component"
 
-- searchTermProp: This is what will capture your search string. Note that this must be a ref e.g
+- displayKey: This is what will be displayed from the data you are passing. You decide to add a separator. From the example component you can decide to use
 
 ```js
-const searchTerm = ref('') // or ref / reactive / any other reactive term
+firstName lastName // coming from the api/json you are consuing
 ```
 
-- isOpenProp: This is expecting a reactive boolean value to know whether to open the select options or not. e.g
+OR
 
 ```js
-const searchTerm = isOpen(false) // or ref / reactive / any other reactive term
+firstName lastName | employeeId // coming from the api/json you are consuing
 ```
 
-- displayKey: This is vital because this is **what will be displayed in the list**. From the **data** you are sending to the component, you will pick the ones that will be displayed e.g **firstName lastName**
+- countCondition: **This is an optional prop**, if you want to pick from the list inifintely, you can take off the **countCondition** prop from the component. But if you have need to cap the number of number of items to be picked from the list then add the **countCondtion** prop. Once it is met, all other items will be disabled.
+
+- v-model: of course we know what v-model is
+
+- primaryKey: Primary key is an essential part of this component, because it tells the component to keep track of a particular **key** in the array that is being passed to it and this is what the **v-model** will be keeping track of. If your primary key is employeeId, as you keeping picking from the list, it will keep adding employeeId to **v-model**.
+
+- defaultValue: **This is an optional prop**. This is the prop you will use if you need to pass default value that matches the primaryKey. E.g in an edit page, you will certainly be passing default value.
