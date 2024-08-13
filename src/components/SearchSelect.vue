@@ -152,10 +152,6 @@ const onClickOutside = (element: HTMLElement, cb: () => void): void => {
   }
 
   document.addEventListener('click', handleClick)
-
-  // if (isOpen.value === false) { // we need to remove this click event
-  //   document.removeEventListener('click', handleClick)
-  // }
 }
 
 onMounted(() => {
