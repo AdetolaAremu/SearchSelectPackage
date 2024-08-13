@@ -30,7 +30,7 @@ npm install searchselect-component
 
 - placeholderName: This is what is attached to the count of the things you will pick in the input box e.g 2 Employee Selected. Take note of the "**Employee** that was passed to the component"
 
-- displayKey: This is what will be displayed from the data you are passing. You decide to add a separator. From the example component you can decide to use
+- displayKey: This is what will be displayed from the data you are passing. You can decide to add a separator. From the example component you can decide to use
 
 ```js
 firstName lastName // coming from the api/json you are consuing
