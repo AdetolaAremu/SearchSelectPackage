@@ -14,14 +14,14 @@ npm install searchselect-component
 
 ```js
  <SearchSelect
-      :data="pseudoEmployeeData"
-      placeholderName="Employee"
-      displayKey="firstName lastName - employeeId"
-      :countCondition="2" // optional
-      v-model="employee"
-      primaryKey="employeeId"
-      :defaultValue="['emp-0001']" // optional
-    />
+    :data="pseudoEmployeeData"
+    placeholderName="Employee"
+    displayKey="firstName lastName - employeeId"
+    :countCondition="2" // optional
+    v-model="employee"
+    primaryKey="employeeId"
+    :defaultValue="['emp-0001']" // optional
+  />
 ```
 
 ## Explanations
