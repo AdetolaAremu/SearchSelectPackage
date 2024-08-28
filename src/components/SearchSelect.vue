@@ -15,7 +15,7 @@
             selectedData.length > 0
               ? selectedData.length.toString() +
                 ` ${pluralize(placeholderName, selectedData.length)} Selected`
-              : 'Search...'
+              : 'Search here'
           "
         />
         <ul
@@ -51,6 +51,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch, type PropType } from 'vue'
+import '../assets/style.css'
 
 type Option<T = unknown> = { id: T; [key: string]: unknown }
 
@@ -90,6 +91,9 @@ const props = defineProps({
   primaryKey: {
     type: [String, Number],
     required: true
+  },
+  toCheck: {
+    type: [String, Number]
   }
 })
 
@@ -120,7 +124,6 @@ watch(selectedData, (newValue: string | object) => {
   if (Array.isArray(newValue)) {
     const getValue = newValue.map((item) => item[props.primaryKey])
     emit('update:modelValue', getValue)
-    console.log(getValue)
   }
 })
 
@@ -195,87 +198,3 @@ const pluralize = (word: string, count: number) => {
   }
 }
 </script>
-
-<style scoped>
-* {
-  box-sizing: border-box;
-}
-
-.mainContainer {
-  position: relative;
-  margin-top: 10px;
-  width: 100%;
-}
-
-.searchContainer {
-  background: white;
-  box-shadow: #0000;
-  position: relative;
-  width: 100%;
-}
-
-.inputWrapper {
-  border-radius: 0.5rem;
-  padding: 9px;
-  font-size: 11px;
-  background: #f9fafb;
-  color: #9ca3af;
-  border: 1px solid #d1d5db;
-  width: 100%;
-  outline: none;
-}
-
-.listContainer {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-  border-width: 1px #d1d5db;
-  border-radius: 0.5rem;
-  box-shadow: #0000;
-  overflow-y: auto;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: black;
-  max-height: 10rem;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.listBox {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-}
-
-.listBox:hover {
-  background: #ecedef;
-}
-
-.listInput {
-  width: 1rem;
-  height: 1rem;
-  padding: 0.5rem;
-  background-color: #f3f4f6;
-  border-color: #d1d5db;
-  border-radius: 0.25rem;
-}
-
-.listInput:focus {
-  outline: 2px solid #3b82f6;
-}
-
-.listInputLabel {
-  width: 100%;
-  margin-inline-start: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
-  color: #111827;
-  border-radius: 0.25rem;
-  text-transform: capitalize;
-}
-</style>

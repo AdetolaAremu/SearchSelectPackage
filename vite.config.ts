@@ -1,18 +1,28 @@
-import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-// import vueDevTools from 'vite-plugin-vue-devtools'
+import { resolve } from 'node:path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue()
-    // vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+  plugins: [vue()],
+  build: {
+    lib: {
+      entry: resolve(__dirname, './src/index.ts'),
+      name: 'vue3-search-select',
+      formats: ['es', 'umd'],
+      fileName: 'vue3-search-select'
+    },
+    rollupOptions: {
+      external: ['vue'],
+      output: {
+        globals: {
+          vue: 'Vue'
+        },
+        assetFileNames: (assetInfo) => {
+          const assetName = assetInfo.name || ''
+          if (assetName === 'style.css') return 'Vue-Search-Select.css'
+          return assetName
+        }
+      }
     }
   }
 })
