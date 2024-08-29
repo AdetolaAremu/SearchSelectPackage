@@ -12,6 +12,10 @@ npm install searchselect-component
 
 ## Basic Usage
 
+```css
+import "vue3-search-select/Vue-Search-Select.css";
+```
+
 ```js
  <SearchSelect
     :data="pseudoEmployeeData"
@@ -46,6 +50,14 @@ firstName lastName | employeeId // coming from the api/json you are consuing
 
 - v-model: of course we know what v-model is
 
-- primaryKey: Primary key is an essential part of this component, because it tells the component to keep track of a particular **key** in the array that is being passed to it and this is what the **v-model** will be keeping track of. If your primary key is employeeId, as you keeping picking from the list, it will keep adding employeeId to **v-model**.
+- primaryKey: Primary key is an essential part of this component, because it tells the component to keep track of a particular **key** in the array that is being passed to it and this is what the **v-model** will be keeping track of. If your primary key is employeeId, as you keeping picking from the list, it will keep adding employeeId to **v-model** as an array e.g [00000, 22222, 44444].
 
 - defaultValue: **This is an optional prop**. This is the prop you will use if you need to pass default value that matches the primaryKey. E.g in an edit page, you will certainly be passing default value.
+
+## Other optional props
+
+| Prop                  | Description                                                                                           | Default Value     |
+| --------------------- | ----------------------------------------------------------------------------------------------------- | ----------------- |
+| listBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
+| inputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
+| inputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
