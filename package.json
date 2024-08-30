@@ -1,7 +1,7 @@
 {
   "name": "vue3-search-select",
-  "version": "2.0.1",
-  "description": "A versatile Vue -3 search and select package allowing for efficient searching, selection, and modification of items",
+  "version": "1.0.0",
+  "description": "A versatile Vue search and select package allowing for efficient searching, selection, and modification of items",
   "author": "Adetola Aremu <aremutola@gmail.com>",
   "main": "./dist/vue3-search-select.umd.cjs",
   "module": "./dist/vue3-search-select.js",
@@ -32,40 +32,32 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
-    "preview": "vite preview",
+    "format": "prettier --write src/",
     "test:unit": "vitest",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.5.1",
+    "eslint-plugin-vue": "^9.27.0",
+    "vitest": "^2.0.5",
     "vue": "^3.4.29"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.8.0",
-    "@tsconfig/node20": "^20.1.4",
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^20.14.5",
+    "@babel/types": "^7.25.6",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.5.1",
-    "cypress": "^13.12.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-cypress": "^3.3.0",
-    "eslint-plugin-vue": "^9.23.0",
-    "jsdom": "^24.1.0",
-    "npm-run-all2": "^6.2.0",
-    "prettier": "^3.2.5",
-    "start-server-and-test": "^2.0.4",
     "typescript": "~5.4.0",
     "vite": "^5.3.1",
-    "vite-plugin-vue-devtools": "^7.3.1",
-    "vitest": "^1.6.0",
-    "vue-tsc": "^2.0.21"
+    "vue-tsc": "^2.1.2"
   }
 }

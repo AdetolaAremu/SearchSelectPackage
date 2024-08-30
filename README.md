@@ -1,13 +1,13 @@
 # SearchSelect Component
 
-A flexible and easy-to-use Vue 3 `SearchSelect` component that allows users to search and select options from a dynamic list.
+A flexible and easy-to-use Vue 3 `SearchSelect` component that allows users to search and select options from a dynamic or static list.
 
 ## Installation
 
 Install the package via npm:
 
 ```bash
-npm install searchselect-component
+npm install vue3-search-select
 ```
 
 ## Basic Usage
@@ -61,3 +61,5 @@ firstName lastName | employeeId // coming from the api/json you are consuing
 | listBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
 | inputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
 | inputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
+
+## Happing coding!

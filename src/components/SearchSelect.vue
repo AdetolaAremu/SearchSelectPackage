@@ -51,7 +51,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch, type PropType } from 'vue'
-import '../assets/style.css'
 
 type Option<T = unknown> = { id: T; [key: string]: unknown }
 
