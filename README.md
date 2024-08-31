@@ -34,23 +34,21 @@ import "vue3-search-select/Vue-Search-Select.css";
 
 - **placeholderName**: This is what is attached to the count of the things you will pick in the input box e.g 2 Employee Selected. Take note of the "**Employee** that was passed to the component"
 
-- **displayKey**: This is what will be displayed from the data you are passing. You can decide to add a separator. From the example component you can decide to use
+- **displayKey**: This is what will be displayed from the data you are passing. You can decide to add a **separator**. From the example component you can decide to use
 
 ```js
 firstName lastName // coming from the api/json you are consuing
 ```
-
 OR
-
 ```js
 firstName lastName | employeeId // coming from the api/json you are consuing
 ```
 
-- **countCondition**: **This is an optional prop**, if you want to pick from the list inifintely, you can take off the **countCondition** prop from the component. But if you have need to cap the number of number of items to be picked from the list then add the **countCondtion** prop. Once it is met, all other items will be disabled.
+- **countCondition**: **This is an optional prop**, if you want to pick from the list inifintely, you can take off the **countCondition** prop from the component. But if you have need to cap the number of items to be picked from the list then add the **countCondtion** prop. Once it is met, all other items will be disabled.
 
 - **v-model**: of course we know what v-model is.
 
-- **primaryKey**: Primary key is an essential part of this component, because it tells the component to keep track of a particular **key** in the array that is being passed to it and this is what the **v-model** will be keeping track of. If your primary key is employeeId, as you keeping picking from the list, it will keep adding employeeId to **v-model** as an array e.g [00000, 22222, 44444].
+- **primaryKey**: Primary key is an essential part of this component, because it tells the component to keep track of a particular **key** in the array that is being passed to it and this is what **v-model** will be keep track of. If your primary key is employeeId, as you keeping picking from the list, it will keep adding employeeId to **v-model** as an array e.g [00000, 22222, 44444].
 
 - **defaultValue**: **This is an optional prop**. This is the prop you will use if you need to pass default value that matches the primaryKey. E.g in an edit page, you will certainly be passing default value.
 
