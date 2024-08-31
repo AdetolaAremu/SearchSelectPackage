@@ -12,6 +12,10 @@ npm install vue3-search-select
 
 ## Basic Usage
 
+```js
+import { SearchSelect } from "vue3-search-select";
+```
+
 ```css
 import "vue3-search-select/Vue-Search-Select.css";
 ```
