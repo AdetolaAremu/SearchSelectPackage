@@ -13,7 +13,7 @@ npm install vue3-search-select
 ## Basic Usage
 
 ```js
-import { SearchSelect } from "vue3-search-select";
+import SearchSelect from 'vue3-search-select'
 ```
 
 ```css
@@ -43,7 +43,9 @@ import "vue3-search-select/Vue-Search-Select.css";
 ```js
 firstName lastName // coming from the api/json you are consuing
 ```
+
 OR
+
 ```js
 firstName lastName | employeeId // coming from the api/json you are consuing
 ```
