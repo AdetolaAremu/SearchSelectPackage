@@ -28,8 +28,8 @@
             <div class="listBox">
               <input
                 :disabled="
-                  countCondition !== null &&
-                  selectedData.length >= countCondition &&
+                  selectMax !== null &&
+                  selectedData.length >= selectMax &&
                   !selectedData.includes(option)
                 "
                 v-model="selectedData"
@@ -51,49 +51,19 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch, type PropType } from 'vue'
+import { searchSelectProps, Option } from '../types/SearchSelect.type'
 
-type Option<T = unknown> = { id: T; [key: string]: unknown }
-
-const props = defineProps({
-  data: {
-    type: Array as PropType<Option[] | any>,
-    required: true
-  },
-  placeholderName: {
-    type: String,
-    default: null
-  },
-  displayKey: {
-    type: String,
-    required: true
-  },
-  countCondition: {
-    type: Number,
-    default: null
-  },
-  defaultValue: {
-    type: [Object, Array],
-    default: () => []
-  },
-  listBackgroundColor: {
-    type: String,
-    default: '#e5e7eb'
-  },
-  inputBorderColour: {
-    type: String,
-    default: '1px solid gray'
-  },
-  inputFocusBorderColor: {
-    type: String,
-    default: '1px solid #6a7ada'
-  },
-  primaryKey: {
-    type: [String, Number],
-    required: true
-  },
-  toCheck: {
-    type: [String, Number]
-  }
+const props = withDefaults(defineProps<searchSelectProps>(), {
+  data: [],
+  placeholderName: '',
+  displayKey: '',
+  selectMax: null,
+  defaultValue: () => [],
+  listBackgroundColor: '#e5e7eb',
+  inputBorderColour: '1px solid gray',
+  inputFocusBorderColor: '1px solid #6a7ada',
+  primaryKey: '',
+  modelValue: () => []
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -119,12 +89,20 @@ const selectDefaultItems = () => {
   }
 }
 
-watch(selectedData, (newValue: string | object) => {
-  if (Array.isArray(newValue)) {
-    const getValue = newValue.map((item) => item[props.primaryKey])
-    emit('update:modelValue', getValue)
-  }
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (!newValue.length) {
+      selectedData.value = []
+    } else {
+      const selectedOptions = props.data.filter((item: Option) =>
+        newValue.includes(item[props.primaryKey])
+      )
+      selectedData.value = selectedOptions
+    }
+  },
+  { immediate: true }
+)
 
 const filteredData = computed(() => {
   return props.data.filter((option: Option) => {

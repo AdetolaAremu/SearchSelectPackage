@@ -7,7 +7,7 @@ A flexible and easy-to-use Vue 3 `SearchSelect` component that allows users to s
 Install the package via npm:
 
 ```bash
-npm install vue3-search-select
+npm i vue3-search-select
 ```
 
 ## Basic Usage
@@ -25,7 +25,7 @@ import "vue3-search-select/Vue-Search-Select.css";
     :data="pseudoEmployeeData"
     placeholderName="Employee"
     displayKey="firstName lastName - employeeId"
-    :countCondition="2" // optional
+    :selectMax="2" // optional
     v-model="employee"
     primaryKey="employeeId"
     :defaultValue="['emp-0001']" // optional
@@ -36,7 +36,7 @@ import "vue3-search-select/Vue-Search-Select.css";
 
 - **data**: This is where you pass your data to, it houses/consumes your data.
 
-- **placeholderName**: This is what is attached to the count of the things you will pick in the input box e.g 2 Employee Selected. Take note of the "**Employee** that was passed to the component"
+- **placeholderName**: This is what is attached to the count of the things you will pick in the input box e.g 2 Employee Selected. Take note of the "**Employee** that was passed to the component". You can change it to whatever you want.
 
 - **displayKey**: This is what will be displayed from the data you are passing. You can decide to add a **separator**. From the example component you can decide to use
 
@@ -50,7 +50,7 @@ OR
 firstName lastName | employeeId // coming from the api/json you are consuing
 ```
 
-- **countCondition**: **This is an optional prop**, if you want to pick from the list inifintely, you can take off the **countCondition** prop from the component. But if you have need to cap the number of items to be picked from the list then add the **countCondtion** prop. Once it is met, all other items will be disabled.
+- **selectMax**: **This is an optional prop**, if you want to pick from the list inifintely, you can take off the **selectMax** prop from the component. But if you have need to cap the number of items to be picked from the list then add the **selectMax** prop. Once it is met, all other items will be disabled.
 
 - **v-model**: of course we know what v-model is.
 
