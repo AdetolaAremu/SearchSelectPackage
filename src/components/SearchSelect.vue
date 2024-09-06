@@ -18,6 +18,8 @@
               : 'Search here'
           "
         />
+        <!-- <div class="__clearSelection">x</div> -->
+
         <ul
           v-show="isOpen && filteredData.length > 0"
           class="listContainer"
@@ -50,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch, type PropType } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch, type PropType, watchEffect } from 'vue'
 import { searchSelectProps, Option } from '../types/SearchSelect.type'
 
 const props = withDefaults(defineProps<searchSelectProps>(), {
@@ -92,16 +94,40 @@ const selectDefaultItems = () => {
 watch(
   () => props.modelValue,
   (newValue) => {
-    if (!newValue.length) {
-      selectedData.value = []
-    } else {
-      const selectedOptions = props.data.filter((item: Option) =>
-        newValue.includes(item[props.primaryKey])
-      )
-      selectedData.value = selectedOptions
+    // we need to make sure data have been selected initially, so we can avoid initialization issue
+    if (selectedData.value.length) {
+      if (!newValue.length) {
+        // once we detect v-model from parent is empty, we need clear selection
+        clearSelection()
+      }
     }
   },
   { immediate: true }
+)
+
+const clearSelection = () => {
+  selectedData.value = []
+}
+
+watch(
+  () => props.primaryKey,
+  (newValue, oldValue) => {
+    if (newValue != oldValue) {
+      // if primary key changes, just clear all selections
+      selectedData.value = []
+    }
+  }
+)
+
+watch(
+  selectedData,
+  (newValue) => {
+    if (Array.isArray(newValue)) {
+      const getValue = newValue.map((item) => item[props.primaryKey])
+      emit('update:modelValue', getValue)
+    }
+  },
+  { deep: true, immediate: true }
 )
 
 const filteredData = computed(() => {
