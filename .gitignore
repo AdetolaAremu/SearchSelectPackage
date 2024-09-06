@@ -31,3 +31,6 @@ coverage
 
 /dist
 *.dist
+/src/App.vue
+/index.html
+/src/main.ts
