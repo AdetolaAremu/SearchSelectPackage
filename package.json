@@ -1,7 +1,7 @@
 {
   "name": "vue3-search-select",
-  "version": "1.0.5",
-  "description": "A versatile Vue search and select package allowing for efficient searching, selection, and modification of items",
+  "version": "1.0.6",
+  "description": "A lightweight and versatile Vue search and select package allowing for efficient searching, selection, and modification of items",
   "author": "Adetola Aremu <aremutola@gmail.com>",
   "main": "./dist/vue3-search-select.umd.cjs",
   "module": "./dist/vue3-search-select.js",
@@ -10,7 +10,7 @@
     ".": {
       "import": "./dist/vue3-search-select.js",
       "require": "./dist/vue3-search-select.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/types/index.d.ts"
     },
     "./Vue-Search-Select.css": "./dist/Vue-Search-Select.css"
   },
