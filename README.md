@@ -1,6 +1,10 @@
 # SearchSelect Component
 
-A flexible and easy-to-use Vue 3 `SearchSelect` component that allows users to search and select options from a dynamic or static list.
+A light-weight flexible and easy-to-use Vue 3 `SearchSelect` component that allows users to search and select options from a dynamic or static list.
+
+## Demo
+
+Check out the [live demonstration](https://search-select.netlify.app/) to see the package in action.
 
 ## Installation
 
