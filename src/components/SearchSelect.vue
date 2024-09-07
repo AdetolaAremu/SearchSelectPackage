@@ -18,7 +18,6 @@
               : 'Search here'
           "
         />
-        <!-- <div class="__clearSelection">x</div> -->
 
         <ul
           v-show="isOpen && filteredData.length > 0"
