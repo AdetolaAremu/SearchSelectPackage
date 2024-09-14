@@ -1,6 +1,6 @@
-# SearchSelect Component
+# Vue 3 Search Select Component
 
-A light-weight flexible and easy-to-use Vue 3 `SearchSelect` component that allows users to search and select options from a dynamic or static list.
+A light-weight, flexible and easy-to-use Vue 3 `SearchSelect` component that allows users to search and select options from a dynamic or static list.
 
 ## Demo
 

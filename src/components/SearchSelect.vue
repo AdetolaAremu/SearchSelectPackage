@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch, type PropType, watchEffect } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { searchSelectProps, Option } from '../types/SearchSelect.type'
 
 const props = withDefaults(defineProps<searchSelectProps>(), {
