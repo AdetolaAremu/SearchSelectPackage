@@ -69,5 +69,6 @@ firstName lastName | employeeId // coming from the api/json you are consuing
 | listBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
 | inputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
 | inputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
+| closeAfterMax         | Close the selection field once the selectMax condition/count condition specified is met..             |                   |
 
 ## Happing coding!
