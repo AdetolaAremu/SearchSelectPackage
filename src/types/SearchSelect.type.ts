@@ -11,4 +11,5 @@ export interface searchSelectProps {
   inputFocusBorderColor?: string
   primaryKey: string | number
   modelValue: any[]
+  closeAfterMax?: boolean
 }

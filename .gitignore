@@ -34,3 +34,6 @@ coverage
 /src/App.vue
 /index.html
 /src/main.ts
+/main.ts
+/App.vue
+/.npmignore

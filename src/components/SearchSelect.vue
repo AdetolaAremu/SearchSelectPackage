@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch, type PropType, watchEffect } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { searchSelectProps, Option } from '../types/SearchSelect.type'
 
 const props = withDefaults(defineProps<searchSelectProps>(), {
@@ -64,7 +64,8 @@ const props = withDefaults(defineProps<searchSelectProps>(), {
   inputBorderColour: '1px solid gray',
   inputFocusBorderColor: '1px solid #6a7ada',
   primaryKey: '',
-  modelValue: () => []
+  modelValue: () => [],
+  closeAfterMax: false
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -73,7 +74,7 @@ const selectedData = ref(
   Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
 )
 const searchTerm = ref('')
-const isOpen = ref()
+const isOpen = ref(false)
 const dropdown = ref<HTMLElement | null>(null)
 
 const selectDefaultItems = () => {
@@ -128,6 +129,12 @@ watch(
   },
   { deep: true, immediate: true }
 )
+
+watch(selectedData, () => {
+  if (props.closeAfterMax === true && selectedData.value.length == props.selectMax) {
+    isOpen.value = false
+  }
+})
 
 const filteredData = computed(() => {
   return props.data.filter((option: Option) => {
