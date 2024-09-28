@@ -27,7 +27,7 @@ import "vue3-search-select/Vue-Search-Select.css";
 ```js
  <SearchSelect
     :data="pseudoEmployeeData"
-    placeholderName="Employee"
+    placeholderName="Employee" // optional
     displayKey="firstName lastName - employeeId"
     :selectMax="2" // optional
     v-model="employee"
@@ -40,7 +40,7 @@ import "vue3-search-select/Vue-Search-Select.css";
 
 - **data**: This is where you pass your data to, it houses/consumes your data.
 
-- **placeholderName**: This is what is attached to the count of the things you will pick in the input box e.g 2 Employee Selected. Take note of the "**Employee** that was passed to the component". You can change it to whatever you want.
+- **placeholderName**: This is what is attached to the count of the things you will pick in the input box e.g 2 Employee Selected. Take note of the "**Employee** that was passed to the component". You can change it to whatever you want. This is optional prop. If you exclude the placeholderName prop, once you pick items what will show in the input will be e.g "1 item selected"
 
 - **displayKey**: This is what will be displayed from the data you are passing. You can decide to add a **separator**. From the example component you can decide to use
 
@@ -69,6 +69,6 @@ firstName lastName | employeeId // coming from the api/json you are consuing
 | listBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
 | inputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
 | inputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
-| closeAfterMax         | Close the selection field once the selectMax condition/count condition specified is met..             | False             |
+| closeAfterMax         | Close the selection field once the selectMax condition/count specified is met.                        | false             |
 
 ## Happing coding!
