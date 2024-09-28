@@ -12,10 +12,12 @@
           :style="{ border: inputStyles }"
           type="text"
           :placeholder="
-            selectedData.length > 0
+            selectedData.length > 0 && placeholderName !== ''
               ? selectedData.length.toString() +
                 ` ${pluralize(placeholderName, selectedData.length)} Selected`
-              : 'Search here'
+              : placeholderName === ''
+                ? selectedData.length + ' selected'
+                : 'Search here'
           "
         />
 
