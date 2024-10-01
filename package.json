@@ -31,7 +31,7 @@
     "vue input search select"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5176",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
     "format": "prettier --write src/",
     "test:unit": "vitest",
