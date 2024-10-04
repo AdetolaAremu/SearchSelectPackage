@@ -5,14 +5,21 @@
     </div>
 
     <div v-if="isOpen === true">
-      <div class="_dynamic_drop_down"></div>
-
-      <div class="_dynamic_search_container">
-        <input placeholder="Search...." class="_dynamic_search_input" type="text" />
-      </div>
-
-      <ul class="_dynamic_list_container">
-        <li>Opadokun Solomon</li>
+      <ul
+        class="_dynamic_list_container"
+        :style="{ 'background-color': dynamicListBackgroundColor }"
+      >
+        <li>
+          <div class="_dynamic_search_container">
+            <input placeholder="Search...." class="_dynamic_search_input" type="text" />
+          </div>
+        </li>
+        <li class="_dynamic_list">
+          <div class="_dynamic_checkmark_img">
+            <img :src="CheckmMark" alt="" style="height: 12px" />
+          </div>
+          <div class="_dynamic_list_value">Manny packqui</div>
+        </li>
       </ul>
     </div>
   </div>
@@ -20,6 +27,15 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
+import CheckmMark from '../assets/images/CheckMark.svg'
+
+interface IProps {
+  dynamicListBackgroundColor: string
+}
+
+withDefaults(defineProps<IProps>(), {
+  dynamicListBackgroundColor: '#e5e7eb'
+})
 
 const isOpen = ref(false)
 const multiDropdown = ref<HTMLElement | null>(null)
@@ -70,7 +86,7 @@ onMounted(() => {
 ._dynamic_search_container {
   position: absolute;
   width: 100%;
-  top: 42px;
+  top: 10px;
 }
 
 ._dynamic_search_input {
@@ -82,12 +98,6 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
-._dynamic_drop_down {
-  background: rgb(226, 231, 227);
-  height: 70px;
-  border-width: 1px #d1d5db;
-}
-
 ._select_placeholder_text {
   color: #9ca3af;
   font-size: 11px;
@@ -95,5 +105,30 @@ onMounted(() => {
 
 ._dynamic_list_container {
   list-style-type: none;
+  top: 100%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  max-height: 10rem;
+  border-width: 1px #d1d5db;
+  border-radius: 0.5rem;
+}
+
+._dynamic_list {
+  cursor: pointer;
+  display: flex;
+  padding-top: 40px;
+}
+
+._dynamic_list_value {
+  margin-left: 10px;
+}
+
+._dynamic_checkmark_img {
+  margin-top: 2px;
 }
 </style>
