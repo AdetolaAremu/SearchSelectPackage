@@ -23,6 +23,11 @@
       </ul>
     </div>
   </div>
+  <!-- once I click on each item, the mark should be shown -->
+  <!-- The mark can be shown at the front or back, this should be a feature -->
+  <!-- A search icon should be on the right hand side once they click on it, a search input should show -->
+  <!-- display key feature -->
+  <!-- slots (be able to show anything and make people to be able to do whatever the like and it will be displayed) -->
 </template>
 
 <script setup lang="ts">
@@ -84,15 +89,15 @@ onMounted(() => {
 }
 
 ._dynamic_search_container {
-  position: absolute;
-  width: 100%;
+  /* position: absolute; */
+  /* width: 100%; */
   top: 10px;
 }
 
 ._dynamic_search_input {
   width: 100%;
   background: #f9fafb;
-  padding: 7px 10px;
+  padding: 7px 7px;
   border-radius: 0.5rem;
   border: 1px solid #d1d5db;
   box-sizing: border-box;
@@ -121,7 +126,7 @@ onMounted(() => {
 ._dynamic_list {
   cursor: pointer;
   display: flex;
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 ._dynamic_list_value {
