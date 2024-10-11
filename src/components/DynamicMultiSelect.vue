@@ -14,11 +14,18 @@
             <input placeholder="Search...." class="_dynamic_search_input" type="text" />
           </div>
         </li>
-        <li class="_dynamic_list">
-          <div class="_dynamic_checkmark_img">
+        <li
+          class="_dynamic_list"
+          @click="handleItem(option[primaryKey], index)"
+          v-for="(option, index) in filteredData"
+          :key="index"
+        >
+          <div class="_dynamic_checkmark_img" v-if="selectedData.includes(option[primaryKey])">
             <img :src="CheckmMark" alt="" style="height: 12px" />
           </div>
-          <div class="_dynamic_list_value">Manny packqui</div>
+          <div class="_dynamic_list_value">
+            {{ getDisplayValue(option, displayKey) }}
+          </div>
         </li>
       </ul>
     </div>
@@ -31,19 +38,27 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import CheckmMark from '../assets/images/CheckMark.svg'
+import { Option } from '../types/SearchSelect.type'
 
 interface IProps {
-  dynamicListBackgroundColor: string
+  data: Option | any
+  dynamicListBackgroundColor?: string
+  displayKey: string
+  selectMax?: number | null
+  primaryKey: string | number
 }
 
-withDefaults(defineProps<IProps>(), {
-  dynamicListBackgroundColor: '#e5e7eb'
+const props = withDefaults(defineProps<IProps>(), {
+  dynamicListBackgroundColor: '#e5e7eb',
+  primaryKey: 'id'
 })
 
 const isOpen = ref(false)
 const multiDropdown = ref<HTMLElement | null>(null)
+const searchTerm = ref('')
+const selectedData = ref<any[]>([])
 
 const openDropDown = () => {
   isOpen.value = true
@@ -58,6 +73,31 @@ const onClickOutside = (element: HTMLElement, cb: () => void): void => {
 
   document.addEventListener('click', handleClick)
 }
+
+const handleItem = (item: string | number, index: number) => {
+  console.log(item, 'iteeeem')
+  console.log(index, 'number')
+
+  // we need to store in in an array
+  selectedData.value?.push(item)
+
+  console.log('selected data', selectedData.value)
+}
+
+const filteredData = computed(() => {
+  // harmonized
+  return props.data.filter((option: Option) => {
+    return Object.values(option).some((value) =>
+      String(value).toLowerCase().includes(searchTerm.value.toLowerCase())
+    )
+  })
+})
+
+const getDisplayValue = (option: { [key: string]: any }, displayKey: string) => {
+  return displayKey.replace(/\b(\w+)\b/g, (match) => option[match] || match)
+}
+
+// pick and only when picked should that check mark show
 
 onMounted(() => {
   if (multiDropdown.value) {
@@ -89,8 +129,6 @@ onMounted(() => {
 }
 
 ._dynamic_search_container {
-  /* position: absolute; */
-  /* width: 100%; */
   top: 10px;
 }
 
@@ -121,6 +159,7 @@ onMounted(() => {
   max-height: 10rem;
   border-width: 1px #d1d5db;
   border-radius: 0.5rem;
+  overflow-y: auto;
 }
 
 ._dynamic_list {
