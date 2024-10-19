@@ -1,15 +1,13 @@
 <template>
   <div class="_package_select_container" @click="openDropDown()" ref="multiDropdown">
-    <!-- <div class="_dynamic_container">
-      <div class="_select_placeholder_text">
-        {{ selectedData.length > 0 ? selectedData.length + ' selected' : 'No selection' }}
-      </div>
-    </div> -->
     <div class="_dynamic_container">
       <div class="_select_placeholder_text">
-        <slot name="selection-text" :item="transformPickedItems">
-          {{ selectedData.length > 0 ? selectedData.length + ' selected' : 'No selection' }}
-        </slot>
+        <div v-if="transformPickedItems.length !== 0">
+          <slot name="dynamicAction" :item="transformPickedItems">
+            {{ selectedData.length > 0 ? selectedData.length + ' selected' : 'No selection' }}
+          </slot>
+        </div>
+        <div v-else>No Selection</div>
       </div>
     </div>
 
@@ -44,11 +42,18 @@
             <img :src="CheckmMark" alt="" style="height: 12px" />
           </div>
           <div class="_dynamic_list_value">
-            <div v-for="(pre, index) in prefix" :key="index">
-              <div v-if="pre.primaryKey === option[primaryKey]">
-                <img :src="pre.src" alt="" class="_dyamic_prefix_image_src" />
+            <div class="_list_prefix_container">
+              <div v-if="imgPrefix">
+                <div v-for="(pre, index) in imgPrefix" :key="index">
+                  <div v-if="pre.primaryKey === option[primaryKey]">
+                    <img :src="pre.src" alt="" class="_dyamic_prefix_image_src" />
+                  </div>
+                </div>
               </div>
+
+              <slot v-else name="listClassPrefix" :item="option" />
             </div>
+
             <div>
               {{ getDisplayValue(option, displayKey) }}
             </div>
@@ -57,12 +62,11 @@
       </ul>
     </div>
   </div>
-  <!-- once I click on each item, the mark should be shown -->
+  <!-- NOTE: the prefix can either be an image or a class -->
+  <!-- if items inside that box is too long then make it scrollable -->
   <!-- The mark can be shown at the front or back, this should be a feature -->
   <!-- A search icon should be on the right hand side once they click on it, a search input should show -->
-  <!-- display key feature -->
   <!-- slots (be able to show anything and make people to be able to do whatever the like and it will be displayed) -->
-  <!-- Allow ppl add prefix etc -->
   <!-- default value -->
 </template>
 
@@ -79,7 +83,7 @@ interface IProps {
   displayPrefix?: string
   selectMax?: number | null
   primaryKey: string | number
-  prefix: Array<{
+  imgPrefix: Array<{
     src: string
     primaryKey: string | number
   }>
@@ -95,7 +99,6 @@ const searchTerm = ref('')
 const selectedData = ref<any[]>([])
 const isSearchInputVisible = ref<boolean>(false)
 const transformPickedItems = ref<any[]>([])
-const getItems = ref<any[]>([])
 const emit = defineEmits(['update:modelValue'])
 
 const openDropDown = () => {
@@ -252,6 +255,9 @@ onMounted(() => {
   height: 20px;
   width: 20px;
   border-radius: 9999px;
+}
+
+._list_prefix_container {
   margin-right: 5px;
 }
 </style>
