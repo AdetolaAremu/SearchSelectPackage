@@ -41,14 +41,11 @@
           <div class="_dynamic_checkmark_img" v-if="selectedData.includes(option[primaryKey])">
             <img :src="CheckmMark" alt="" style="height: 12px" />
           </div>
+
           <div class="_dynamic_list_value">
             <div class="_list_prefix_container">
               <div v-if="imgPrefix">
-                <div v-for="(pre, index) in imgPrefix" :key="index">
-                  <div v-if="pre.primaryKey === option[primaryKey]">
-                    <img :src="pre.src" alt="" class="_dyamic_prefix_image_src" />
-                  </div>
-                </div>
+                <img :src="option[imgPrefix]" alt="" class="_dyamic_prefix_image_src" />
               </div>
 
               <slot v-else name="listClassPrefix" :item="option" />
@@ -62,11 +59,12 @@
       </ul>
     </div>
   </div>
-  <!-- NOTE: the prefix can either be an image or a class -->
-  <!-- if items inside that box is too long then make it scrollable -->
+  <!-- Max select | Done -->
+  <!-- NOTE: the prefix can either be an image or a class | done -->
+  <!-- if items inside that box is too long then make it scrollable | done -->
   <!-- The mark can be shown at the front or back, this should be a feature -->
-  <!-- A search icon should be on the right hand side once they click on it, a search input should show -->
-  <!-- slots (be able to show anything and make people to be able to do whatever the like and it will be displayed) -->
+  <!-- A search icon should be on the right hand side once they click on it, a search input should show | done -->
+  <!-- slots (be able to show anything and make people to be able to do whatever the like and it will be displayed) | done -->
   <!-- default value -->
 </template>
 
@@ -83,10 +81,7 @@ interface IProps {
   displayPrefix?: string
   selectMax?: number | null
   primaryKey: string | number
-  imgPrefix: Array<{
-    src: string
-    primaryKey: string | number
-  }>
+  imgPrefix: string
 }
 
 const props = withDefaults(defineProps<IProps>(), {
@@ -101,9 +96,7 @@ const isSearchInputVisible = ref<boolean>(false)
 const transformPickedItems = ref<any[]>([])
 const emit = defineEmits(['update:modelValue'])
 
-const openDropDown = () => {
-  isOpen.value = true
-}
+const openDropDown = () => (isOpen.value = true)
 
 const toggleSearchInput = () => {
   isSearchInputVisible.value = !isSearchInputVisible.value
@@ -120,6 +113,13 @@ const onClickOutside = (element: HTMLElement, cb: () => void): void => {
 }
 
 const handleItem = (item: string | number) => {
+  if (
+    props.selectMax !== null &&
+    selectedData.value.length === props.selectMax &&
+    !selectedData.value.includes(item)
+  )
+    return
+
   if (selectedData.value.includes(item)) {
     selectedData.value = selectedData.value.filter((i) => i !== item)
   } else {
@@ -179,10 +179,13 @@ onMounted(() => {
   border: 1px solid gray;
   width: 100%;
   height: 35px;
+  max-height: 35px;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   padding: 4px 10px 4px 10px;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 ._dynamic_search_container {
@@ -233,6 +236,7 @@ onMounted(() => {
 
 ._dynamic_checkmark_img {
   margin-top: 2px;
+  margin-left: 8px;
 }
 
 ._dynamic_list:hover {
