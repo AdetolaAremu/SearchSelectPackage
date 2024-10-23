@@ -62,7 +62,6 @@
   <!-- Max select | Done -->
   <!-- NOTE: the prefix can either be an image or a class | done -->
   <!-- if items inside that box is too long then make it scrollable | done -->
-  <!-- The mark can be shown at the front or back, this should be a feature -->
   <!-- A search icon should be on the right hand side once they click on it, a search input should show | done -->
   <!-- slots (be able to show anything and make people to be able to do whatever the like and it will be displayed) | done -->
   <!-- default value -->
@@ -82,16 +81,21 @@ interface IProps {
   selectMax?: number | null
   primaryKey: string | number
   imgPrefix: string
+  defaultValue?: Object | string[]
 }
 
 const props = withDefaults(defineProps<IProps>(), {
-  dynamicListBackgroundColor: '#e5e7eb'
+  dynamicListBackgroundColor: '#e5e7eb',
+  primaryKey: '',
+  defaultValue: () => []
 })
 
 const isOpen = ref(false)
 const multiDropdown = ref<HTMLElement | null>(null)
 const searchTerm = ref('')
-const selectedData = ref<any[]>([])
+const selectedData = ref(
+  Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
+)
 const isSearchInputVisible = ref<boolean>(false)
 const transformPickedItems = ref<any[]>([])
 const emit = defineEmits(['update:modelValue'])
@@ -112,6 +116,28 @@ const onClickOutside = (element: HTMLElement, cb: () => void): void => {
   document.addEventListener('click', handleClick)
 }
 
+const selectDefaultItems = async () => {
+  if (props.defaultValue) {
+    const defaultValues = Array.isArray(props.defaultValue)
+      ? props.defaultValue
+      : [props.defaultValue]
+
+    const defaultSelection = props.data.filter((item: Option) =>
+      defaultValues.some((value) => value === item[props.primaryKey])
+    )
+
+    let keepPrimaryKeys: (string | number)[] = []
+
+    keepPrimaryKeys = defaultSelection.map((item: Option) => {
+      return item[props.primaryKey]
+    })
+
+    selectedData.value = keepPrimaryKeys
+
+    transformPickedItems.value = filterByKey(props.data, selectedData.value, props.primaryKey)
+  }
+}
+
 const handleItem = (item: string | number) => {
   if (
     props.selectMax !== null &&
@@ -127,22 +153,28 @@ const handleItem = (item: string | number) => {
   }
 }
 
+const filterByKey = (data: any[], newValue: any[], primaryKey: string | number) => {
+  return data.filter((item: any) => newValue.includes(item[primaryKey]))
+}
+
 watch(
   selectedData,
   (newValue) => {
-    // console.log('newValue', newValue)
     if (Array.isArray(newValue)) {
+      // console.log('nuu value', newValue)
       emit('update:modelValue', newValue)
 
-      transformPickedItems.value = props.data.filter((item: any) => {
-        return newValue.includes(item[props.primaryKey])
-      })
-
-      console.log('items', transformPickedItems.value)
+      transformPickedItems.value = filterByKey(props.data, newValue, props.primaryKey)
     }
   },
   { deep: true, immediate: true }
 )
+
+const transformPickedData = (newValue: any[]) => {
+  props.data.filter((item: any) => {
+    return newValue.includes(item[props.primaryKey])
+  })
+}
 
 const filteredData = computed(() => {
   return props.data.filter((option: Option) => {
@@ -166,6 +198,8 @@ onMounted(() => {
       cleanup
     })
   }
+
+  selectDefaultItems()
 })
 </script>
 
