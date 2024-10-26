@@ -39,7 +39,7 @@
           :key="index"
         >
           <div class="_dynamic_checkmark_img" v-if="selectedData.includes(option[primaryKey])">
-            <img :src="CheckmMark" alt="" style="height: 12px" />
+            <img :src="CheckMark" alt="" style="height: 12px" />
           </div>
 
           <div class="_dynamic_list_value">
@@ -64,27 +64,19 @@
   <!-- if items inside that box is too long then make it scrollable | done -->
   <!-- A search icon should be on the right hand side once they click on it, a search input should show | done -->
   <!-- slots (be able to show anything and make people to be able to do whatever the like and it will be displayed) | done -->
-  <!-- default value -->
+  <!-- default value | done -->
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import CheckmMark from '../assets/images/CheckMark.svg'
+import CheckMark from '../assets/images/CheckMark.svg'
 import Search from '../assets/images/Search.svg'
-import { Option } from '../types/SearchSelect.type'
+import { IDynamicProps } from '../types/DynamicMultiSelect.type'
+import { Option } from '../types/Util.type'
+import { getDisplayValue } from '../util/Helper'
+import { onClickOutside } from '../util/Helper'
 
-interface IProps {
-  data: Option | any
-  dynamicListBackgroundColor?: string
-  displayKey: string
-  displayPrefix?: string
-  selectMax?: number | null
-  primaryKey: string | number
-  imgPrefix: string
-  defaultValue?: Object | string[]
-}
-
-const props = withDefaults(defineProps<IProps>(), {
+const props = withDefaults(defineProps<IDynamicProps>(), {
   dynamicListBackgroundColor: '#e5e7eb',
   primaryKey: '',
   defaultValue: () => []
@@ -104,16 +96,6 @@ const openDropDown = () => (isOpen.value = true)
 
 const toggleSearchInput = () => {
   isSearchInputVisible.value = !isSearchInputVisible.value
-}
-
-const onClickOutside = (element: HTMLElement, cb: () => void): void => {
-  const handleClick = (event: MouseEvent) => {
-    if (!element.contains(event.target as Node)) {
-      cb()
-    }
-  }
-
-  document.addEventListener('click', handleClick)
 }
 
 const selectDefaultItems = async () => {
@@ -161,7 +143,6 @@ watch(
   selectedData,
   (newValue) => {
     if (Array.isArray(newValue)) {
-      // console.log('nuu value', newValue)
       emit('update:modelValue', newValue)
 
       transformPickedItems.value = filterByKey(props.data, newValue, props.primaryKey)
@@ -170,12 +151,6 @@ watch(
   { deep: true, immediate: true }
 )
 
-const transformPickedData = (newValue: any[]) => {
-  props.data.filter((item: any) => {
-    return newValue.includes(item[props.primaryKey])
-  })
-}
-
 const filteredData = computed(() => {
   return props.data.filter((option: Option) => {
     return Object.values(option).some((value) =>
@@ -183,10 +158,6 @@ const filteredData = computed(() => {
     )
   })
 })
-
-const getDisplayValue = (option: { [key: string]: any }, displayKey: string) => {
-  return displayKey.replace(/\b(\w+)\b/g, (match) => option[match] || match)
-}
 
 onMounted(() => {
   if (multiDropdown.value) {

@@ -1,4 +1,4 @@
-export type Option<T = unknown> = { id: T; [key: string]: unknown }
+import { Option } from './Util.type'
 
 export interface searchSelectProps {
   data: Option | any
