@@ -6,7 +6,7 @@ export interface IDynamicProps {
   displayPrefix?: string
   selectMax?: number | null
   primaryKey: string | number
-  imgPrefix: string
+  imgPrefix?: string
   defaultValue?: Object | string[]
   dynamicListBackgroundColor?: string
   dynamicInputBorderColour?: string

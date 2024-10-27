@@ -152,7 +152,6 @@ watch(
       emit('update:modelValue', newValue)
 
       transformPickedItems.value = filterByKey(props.data, newValue, props.primaryKey)
-      console.log('I got called', newValue)
 
       if (props.closeAfterMax === true && selectedData.value.length == props.selectMax)
         isOpen.value = false
@@ -162,10 +161,12 @@ watch(
 )
 
 const filteredData = computed(() => {
+  const searchWords = searchTerm.value.toLowerCase().split(' ')
+
   return props.data.filter((option: Option) => {
-    return Object.values(option).some((value) =>
-      String(value).toLowerCase().includes(searchTerm.value.toLowerCase())
-    )
+    const optionString = Object.values(option).join(' ').toLowerCase()
+
+    return searchWords.every((word) => optionString.includes(word))
   })
 })
 
