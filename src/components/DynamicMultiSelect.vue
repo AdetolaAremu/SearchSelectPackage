@@ -32,30 +32,32 @@
             />
           </div>
         </li>
-        <li
-          class="_dynamic_list"
-          @click="handleItem(option[primaryKey])"
-          v-for="(option, index) in filteredData"
-          :key="index"
-        >
-          <div class="_dynamic_checkmark_img" v-if="selectedData.includes(option[primaryKey])">
-            <img :src="CheckMark" alt="" style="height: 12px" />
-          </div>
+        <transition-group name="list" tag="ul" class="dynamic-list-group">
+          <li
+            class="_dynamic_list"
+            @click="handleItem(option[primaryKey])"
+            v-for="(option, index) in filteredData"
+            :key="index"
+          >
+            <div class="_dynamic_checkmark_img" v-if="selectedData.includes(option[primaryKey])">
+              <img :src="CheckMark" alt="" style="height: 12px" />
+            </div>
 
-          <div class="_dynamic_list_value">
-            <div class="_list_prefix_container">
-              <div v-if="imgPrefix">
-                <img :src="option[imgPrefix]" alt="" class="_dyamic_prefix_image_src" />
+            <div class="_dynamic_list_value">
+              <div class="_list_prefix_container">
+                <div v-if="imgPrefix">
+                  <img :src="option[imgPrefix]" alt="" class="_dyamic_prefix_image_src" />
+                </div>
+
+                <slot v-else name="listClassPrefix" :item="option" />
               </div>
 
-              <slot v-else name="listClassPrefix" :item="option" />
+              <div>
+                {{ getDisplayValue(option, displayKey) }}
+              </div>
             </div>
-
-            <div>
-              {{ getDisplayValue(option, displayKey) }}
-            </div>
-          </div>
-        </li>
+          </li>
+        </transition-group>
       </ul>
     </div>
   </div>
@@ -78,8 +80,12 @@ import { onClickOutside } from '../util/Helper'
 
 const props = withDefaults(defineProps<IDynamicProps>(), {
   dynamicListBackgroundColor: '#e5e7eb',
+  dynamicInputBorderColour: '1px solid gray',
+  dynamicInputFocusBorderColor: '1px solid #6a7ada',
   primaryKey: '',
-  defaultValue: () => []
+  modelValue: () => [],
+  defaultValue: () => [],
+  closeAfterMax: false
 })
 
 const isOpen = ref(false)
@@ -146,6 +152,10 @@ watch(
       emit('update:modelValue', newValue)
 
       transformPickedItems.value = filterByKey(props.data, newValue, props.primaryKey)
+      console.log('I got called', newValue)
+
+      if (props.closeAfterMax === true && selectedData.value.length == props.selectMax)
+        isOpen.value = false
     }
   },
   { deep: true, immediate: true }
@@ -173,100 +183,3 @@ onMounted(() => {
   selectDefaultItems()
 })
 </script>
-
-<style scoped>
-._package_select_container {
-  position: relative;
-}
-
-._dynamic_container {
-  background: white;
-  border: 1px solid gray;
-  width: 100%;
-  height: 35px;
-  max-height: 35px;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  padding: 4px 10px 4px 10px;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-._dynamic_search_container {
-  top: 10px;
-  width: 100%;
-}
-
-._dynamic_search_input {
-  width: 100%;
-  background: #f9fafb;
-  padding: 7px 7px;
-  border-radius: 0.5rem;
-  border: 1px solid #d1d5db;
-  box-sizing: border-box;
-}
-
-._select_placeholder_text {
-  color: #9ca3af;
-  font-size: 11px;
-}
-
-._dynamic_list_container {
-  list-style-type: none;
-  top: 100%;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  margin: 0;
-  padding: 10px;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  max-height: 10rem;
-  border-width: 1px #d1d5db;
-  border-radius: 0.5rem;
-  overflow-y: auto;
-}
-
-._dynamic_list {
-  cursor: pointer;
-  display: flex;
-  padding-top: 13px;
-}
-
-._dynamic_list_value {
-  margin-left: 10px;
-  display: flex;
-}
-
-._dynamic_checkmark_img {
-  margin-top: 2px;
-  margin-left: 8px;
-}
-
-._dynamic_list:hover {
-  background: #ecedef;
-}
-
-._dynamic_search_list_container {
-  padding: 5px;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  display: flex;
-  width: 100%;
-}
-
-.dynamic_search_input_container {
-  margin-right: 3px;
-}
-
-._dyamic_prefix_image_src {
-  height: 20px;
-  width: 20px;
-  border-radius: 9999px;
-}
-
-._list_prefix_container {
-  margin-right: 5px;
-}
-</style>
