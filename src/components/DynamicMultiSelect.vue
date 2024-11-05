@@ -3,9 +3,11 @@
     <div class="_dynamic_container">
       <div class="_select_placeholder_text">
         <div v-if="transformPickedItems.length !== 0">
-          <slot name="dynamicAction" :item="transformPickedItems">
-            {{ selectedData.length > 0 ? selectedData.length + ' selected' : 'No selection' }}
-          </slot>
+          <div class="_slot_content">
+            <slot name="dynamicAction" :item="transformPickedItems">
+              {{ selectedData.length > 0 ? selectedData.length + ' selected' : 'No selection' }}
+            </slot>
+          </div>
         </div>
         <div v-else>No Selection</div>
       </div>
@@ -61,12 +63,6 @@
       </ul>
     </div>
   </div>
-  <!-- Max select | Done -->
-  <!-- NOTE: the prefix can either be an image or a class | done -->
-  <!-- if items inside that box is too long then make it scrollable | done -->
-  <!-- A search icon should be on the right hand side once they click on it, a search input should show | done -->
-  <!-- slots (be able to show anything and make people to be able to do whatever the like and it will be displayed) | done -->
-  <!-- default value | done -->
 </template>
 
 <script setup lang="ts">
@@ -158,6 +154,16 @@ watch(
     }
   },
   { deep: true, immediate: true }
+)
+
+watch(
+  () => props.primaryKey,
+  (newValue, oldValue) => {
+    if (newValue != oldValue) {
+      // if primary key changes, just clear all selections
+      selectedData.value = []
+    }
+  }
 )
 
 const filteredData = computed(() => {
