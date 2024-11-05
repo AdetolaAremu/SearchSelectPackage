@@ -18,11 +18,11 @@ Check out the [live demonstration](https://search-select.netlify.app/) to see th
 
 ### Search Select
 
-[![Search Select](https://i.postimg.cc/HsRN5Krk/Screen-Recording-2024-11-05-at-09-45-31.gif)](https://postimg.cc/ZCPjzwPG)
+[![Search Select](https://i.postimg.cc/xdHbskjz/Screen-Recording-2024-11-05-at-10-04-27.gif)](https://postimg.cc/nsFzrhDF)
 
 ### Dynamic Multi Select
 
-[![Dynamic Multi Select](https://i.postimg.cc/KzbH12k6/Screen-Recording-2024-11-05-at-09-45-31-1.gif)](https://postimg.cc/zLdjQ4k7)
+[![Dynamic Multi Select](https://i.postimg.cc/HsRN5Krk/Screen-Recording-2024-11-05-at-09-45-31.gif)](https://postimg.cc/ZCPjzwPG)
 
 ## Components in this package
 
