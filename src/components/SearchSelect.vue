@@ -54,7 +54,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { searchSelectProps, Option } from '../types/SearchSelect.type'
+import { searchSelectProps } from '../types/SearchSelect.type'
+import { Option } from '../types/Util.type'
+import { getDisplayValue } from '../util/Helper'
+import { onClickOutside } from '../util/Helper'
 
 const props = withDefaults(defineProps<searchSelectProps>(), {
   data: [],
@@ -139,10 +142,12 @@ watch(selectedData, () => {
 })
 
 const filteredData = computed(() => {
+  const searchWords = searchTerm.value.toLowerCase().split(' ')
+
   return props.data.filter((option: Option) => {
-    return Object.values(option).some((value) =>
-      String(value).toLowerCase().includes(searchTerm.value.toLowerCase())
-    )
+    const optionString = Object.values(option).join(' ').toLowerCase()
+
+    return searchWords.every((word) => optionString.includes(word))
   })
 })
 
@@ -153,20 +158,6 @@ const handleInput = (event: Event) => {
 const inputStyles = computed(() =>
   isOpen.value === true ? props.inputFocusBorderColor : props.inputBorderColour
 )
-
-const getDisplayValue = (option: { [key: string]: any }, displayKey: string) => {
-  return displayKey.replace(/\b(\w+)\b/g, (match) => option[match] || match)
-}
-
-const onClickOutside = (element: HTMLElement, cb: () => void): void => {
-  const handleClick = (event: MouseEvent) => {
-    if (!element.contains(event.target as Node)) {
-      cb()
-    }
-  }
-
-  document.addEventListener('click', handleClick)
-}
 
 onMounted(() => {
   if (dropdown.value) {
