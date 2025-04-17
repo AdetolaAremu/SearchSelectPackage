@@ -1,5 +1,10 @@
 export const getDisplayValue = (option: { [key: string]: any }, displayKey: string) => {
-  return displayKey.replace(/\b(\w+)\b/g, (match) => option[match] || match)
+  return displayKey
+    .replace(/\b(\w+)\b/g, (match) => {
+      return option.hasOwnProperty(match) ? option[match] : ''
+    })
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 export const onClickOutside = (element: HTMLElement, cb: () => void): void => {
