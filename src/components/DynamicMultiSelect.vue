@@ -75,6 +75,7 @@ import { getDisplayValue } from '../util/Helper'
 import { onClickOutside } from '../util/Helper'
 
 const props = withDefaults(defineProps<IDynamicProps>(), {
+  data: () => [],
   dynamicListBackgroundColor: '#e5e7eb',
   dynamicInputBorderColour: '1px solid gray',
   dynamicInputFocusBorderColor: '1px solid #6a7ada',
@@ -83,7 +84,8 @@ const props = withDefaults(defineProps<IDynamicProps>(), {
   defaultValue: () => [],
   closeAfterMax: false,
   showOnSearch: false,
-  searchApi: null
+  searchApi: null,
+  debounceApiCallBy: 1000
 })
 
 const isOpen = ref(false)
@@ -175,25 +177,29 @@ watch(
   }
 )
 
-watch(searchTerm, async (term) => {
-  if (props.showOnSearch && props.searchApi && term.length > 0) {
-    try {
-      searchResults.value = await props.searchApi(term)
-    } catch (err) {
-      console.error('Search API error:', err)
-      searchResults.value = []
+let debounceTimer: ReturnType<typeof setTimeout>
+watch(searchTerm, (term) => {
+  clearTimeout(debounceTimer)
+
+  debounceTimer = setTimeout(async () => {
+    if (props.showOnSearch && props.searchApi && term.length > 0) {
+      try {
+        searchResults.value = await props.searchApi(term)
+      } catch (err) {
+        searchResults.value = []
+      }
     }
-  }
+  }, props.debounceApiCallBy)
 })
 
 const filteredData = computed(() => {
   const searchWords = searchTerm.value.toLowerCase().split(' ').filter(Boolean)
 
   const mergedData = [
-    ...props.data,
-    ...selectedOptionsStore.value.filter(
-      (item) => !props.data.some((i: any) => i[props.primaryKey] === item[props.primaryKey])
-    )
+    ...(props.data || []),
+    ...(selectedOptionsStore.value?.filter(
+      (item) => !(props.data || []).some((i: any) => i[props.primaryKey] === item[props.primaryKey])
+    ) || [])
   ]
 
   if (props.showOnSearch && searchWords.length === 0) {

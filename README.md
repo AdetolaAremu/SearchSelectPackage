@@ -37,6 +37,7 @@ Check out the [live demonstration](https://search-select.netlify.app/) to see th
 ## Search Select
 
 ✨ Key Features
+
 🗂 Custom Display Order
 Arrange options in any order, helping users easily find frequently selected or high-priority items.
 
@@ -79,8 +80,12 @@ import "vue3-search-select/Vue-Search-Select.css";
 The DynamicMultiSelect component is packed with advanced functionality, allowing users to select multiple options from a dynamic list with ease and flexibility.
 
 🚀 Key Features
+
 🎛️ Slot Manipulation
 Customize component slots to control how each item selected will be displayed, allowing for unique visual arrangements.
+
+🔍 Show Results on Search (optional)
+Can display search results when users begin typing, keeping the interface clean and focused until needed.
 
 🗂️ Custom Display Order
 Easily reorder options to prioritize frequently selected or high-importance items at the top of the list.
@@ -207,6 +212,7 @@ _EXAMPLE_
 | Prop                         | Description                                                                                           | Default Value     |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------- |
 | dynamicListBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
+| debounceApiCallBy            | Debounce API calls                                                                                    | 1000 (ms)         |
 | dynamicInputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
 | dynamicInputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
 | closeAfterMax                | Close the selection field once the selectMax condition/count specified is met.                        | false             |
