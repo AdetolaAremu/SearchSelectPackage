@@ -34,6 +34,9 @@
             />
           </div>
         </li>
+        <li v-if="isLoading" class="_dynamic_loading_container">
+          <div class="_dynamic_loading_text">Loading...</div>
+        </li>
         <transition-group name="list" tag="ul" class="dynamic-list-group">
           <li
             class="_dynamic_list"
@@ -99,6 +102,7 @@ const transformPickedItems = ref<any[]>([])
 const searchResults = ref<Option[]>([])
 const emit = defineEmits(['update:modelValue'])
 const selectedOptionsStore = ref<Option[]>([])
+const isLoading = ref(false)
 
 const openDropDown = () => (isOpen.value = true)
 
@@ -183,10 +187,13 @@ watch(searchTerm, (term) => {
 
   debounceTimer = setTimeout(async () => {
     if (props.showOnSearch && props.searchApi && term.length > 0) {
+      isLoading.value = true
       try {
         searchResults.value = await props.searchApi(term)
       } catch (err) {
         searchResults.value = []
+      } finally {
+        isLoading.value = false
       }
     }
   }, props.debounceApiCallBy)
