@@ -1,5 +1,10 @@
 # Vue 3 Search Select Component
 
+# vue3-search-select
+
+[![npm](https://img.shields.io/npm/v/vue3-search-select)](https://www.npmjs.com/package/vue3-search-select)
+[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/vue3-search-select)](https://github.com/AdetolaAremu/SearchSelectPackage/blob/master/LICENSE)
+
 A light-weight, flexible and easy-to-use Vue 3 Search and Select component that allows users to search and select options from a dynamic or static list.
 
 ## Installation
@@ -32,6 +37,7 @@ Check out the [live demonstration](https://search-select.netlify.app/) to see th
 ## Search Select
 
 ✨ Key Features
+
 🗂 Custom Display Order
 Arrange options in any order, helping users easily find frequently selected or high-priority items.
 
@@ -74,8 +80,12 @@ import "vue3-search-select/Vue-Search-Select.css";
 The DynamicMultiSelect component is packed with advanced functionality, allowing users to select multiple options from a dynamic list with ease and flexibility.
 
 🚀 Key Features
+
 🎛️ Slot Manipulation
 Customize component slots to control how each item selected will be displayed, allowing for unique visual arrangements.
+
+🔍 Show Results on Search (optional)
+Can display search results when users begin typing, keeping the interface clean and focused until needed.
 
 🗂️ Custom Display Order
 Easily reorder options to prioritize frequently selected or high-importance items at the top of the list.
@@ -128,6 +138,34 @@ import "vue3-search-select/Vue-Search-Select.css";
   const fullNameList = (item: Person[]) => { // show fullname after the picked
     let allItems = item?.map((obj) => `${obj.firstName} ${obj.lastName}`).join(', ')
     return allItems
+  }
+```
+
+**Another shiny use case is API - Show On Search**
+It helps when you want to keep the full list hidden by default and only show results based on what the user is actively searching for.
+
+```js
+  <DynamicMultiSelect
+    v-model="selectedUsers"
+    :data="searchResults"
+    displayKey="name"
+    primaryKey="id"
+    :showOnSearch="true" // important for this implementation
+    :searchApi="searchUsersApi" // your function where the api is being called will be here
+    :selectMax="5"
+    :debounceApiCallBy="1500" // by default this debounce is set to 1 second but it is adjustable
+  />
+
+  const selectedUsers = ref([])
+  const searchResults = ref([])
+
+  // searchUsersApi takes a search term as a parameter,
+  // the searchApi prop will take a function like this,
+  // call it and pass the search string to the parameter,
+  const searchUsersApi = async (searchTerm: string) => {
+    const response = await fetch(`https://api.github.com/search/repositories?q=${searchTerm}`)
+    const data = await response.json()
+    return (searchResults.value = data.items)
   }
 ```
 
@@ -202,6 +240,7 @@ _EXAMPLE_
 | Prop                         | Description                                                                                           | Default Value     |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------- |
 | dynamicListBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
+| debounceApiCallBy            | Debounce API calls                                                                                    | 1000 (ms)         |
 | dynamicInputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
 | dynamicInputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
 | closeAfterMax                | Close the selection field once the selectMax condition/count specified is met.                        | false             |

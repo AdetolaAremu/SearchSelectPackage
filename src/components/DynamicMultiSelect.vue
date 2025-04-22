@@ -34,6 +34,9 @@
             />
           </div>
         </li>
+        <li v-if="isLoading" class="_dynamic_loading_container">
+          <div class="_dynamic_loading_text">Loading...</div>
+        </li>
         <transition-group name="list" tag="ul" class="dynamic-list-group">
           <li
             class="_dynamic_list"
@@ -75,13 +78,17 @@ import { getDisplayValue } from '../util/Helper'
 import { onClickOutside } from '../util/Helper'
 
 const props = withDefaults(defineProps<IDynamicProps>(), {
+  data: () => [],
   dynamicListBackgroundColor: '#e5e7eb',
   dynamicInputBorderColour: '1px solid gray',
   dynamicInputFocusBorderColor: '1px solid #6a7ada',
   primaryKey: '',
   modelValue: () => [],
   defaultValue: () => [],
-  closeAfterMax: false
+  closeAfterMax: false,
+  showOnSearch: false,
+  searchApi: null,
+  debounceApiCallBy: 1000
 })
 
 const isOpen = ref(false)
@@ -92,7 +99,10 @@ const selectedData = ref(
 )
 const isSearchInputVisible = ref<boolean>(false)
 const transformPickedItems = ref<any[]>([])
+const searchResults = ref<Option[]>([])
 const emit = defineEmits(['update:modelValue'])
+const selectedOptionsStore = ref<Option[]>([])
+const isLoading = ref(false)
 
 const openDropDown = () => (isOpen.value = true)
 
@@ -110,30 +120,36 @@ const selectDefaultItems = async () => {
       defaultValues.some((value) => value === item[props.primaryKey])
     )
 
-    let keepPrimaryKeys: (string | number)[] = []
-
-    keepPrimaryKeys = defaultSelection.map((item: Option) => {
-      return item[props.primaryKey]
-    })
+    const keepPrimaryKeys = defaultSelection.map((item: Option) => item[props.primaryKey])
 
     selectedData.value = keepPrimaryKeys
 
     transformPickedItems.value = filterByKey(props.data, selectedData.value, props.primaryKey)
+    selectedOptionsStore.value = transformPickedItems.value
   }
 }
 
-const handleItem = (item: string | number) => {
+const handleItem = (itemId: string | number) => {
   if (
     props.selectMax !== null &&
     selectedData.value.length === props.selectMax &&
-    !selectedData.value.includes(item)
+    !selectedData.value.includes(itemId)
   )
     return
 
-  if (selectedData.value.includes(item)) {
-    selectedData.value = selectedData.value.filter((i) => i !== item)
+  const item = props.data.find((i: any) => i[props.primaryKey] === itemId)
+  if (!item) return
+
+  const index = selectedData.value.findIndex((id) => id === itemId)
+
+  if (index > -1) {
+    selectedData.value.splice(index, 1)
+    selectedOptionsStore.value = selectedOptionsStore.value.filter(
+      (opt) => opt[props.primaryKey] !== itemId
+    )
   } else {
-    selectedData.value.push(item)
+    selectedData.value.push(itemId)
+    selectedOptionsStore.value.push(item)
   }
 }
 
@@ -144,13 +160,13 @@ const filterByKey = (data: any[], newValue: any[], primaryKey: string | number) 
 watch(
   selectedData,
   (newValue) => {
-    if (Array.isArray(newValue)) {
-      emit('update:modelValue', newValue)
+    emit('update:modelValue', newValue)
 
-      transformPickedItems.value = filterByKey(props.data, newValue, props.primaryKey)
+    const combinedData = [...props.data, ...searchResults.value]
+    transformPickedItems.value = filterByKey(combinedData, newValue, props.primaryKey)
 
-      if (props.closeAfterMax === true && selectedData.value.length == props.selectMax)
-        isOpen.value = false
+    if (props.closeAfterMax === true && newValue.length === props.selectMax) {
+      isOpen.value = false
     }
   },
   { deep: true, immediate: true }
@@ -160,18 +176,45 @@ watch(
   () => props.primaryKey,
   (newValue, oldValue) => {
     if (newValue != oldValue) {
-      // if primary key changes, just clear all selections
       selectedData.value = []
     }
   }
 )
 
+let debounceTimer: ReturnType<typeof setTimeout>
+watch(searchTerm, (term) => {
+  clearTimeout(debounceTimer)
+
+  debounceTimer = setTimeout(async () => {
+    if (props.showOnSearch && props.searchApi && term.length > 0) {
+      isLoading.value = true
+      try {
+        searchResults.value = await props.searchApi(term)
+      } catch (err) {
+        searchResults.value = []
+      } finally {
+        isLoading.value = false
+      }
+    }
+  }, props.debounceApiCallBy)
+})
+
 const filteredData = computed(() => {
-  const searchWords = searchTerm.value.toLowerCase().split(' ')
+  const searchWords = searchTerm.value.toLowerCase().split(' ').filter(Boolean)
 
-  return props.data.filter((option: Option) => {
+  const mergedData = [
+    ...(props.data || []),
+    ...(selectedOptionsStore.value?.filter(
+      (item) => !(props.data || []).some((i: any) => i[props.primaryKey] === item[props.primaryKey])
+    ) || [])
+  ]
+
+  if (props.showOnSearch && searchWords.length === 0) {
+    return mergedData.filter((item) => selectedData.value.includes(item[props.primaryKey]))
+  }
+
+  return mergedData.filter((option: Option) => {
     const optionString = Object.values(option).join(' ').toLowerCase()
-
     return searchWords.every((word) => optionString.includes(word))
   })
 })
@@ -180,12 +223,15 @@ onMounted(() => {
   if (multiDropdown.value) {
     const cleanup = onClickOutside(multiDropdown.value, () => {
       isOpen.value = false
+      searchTerm.value = ''
     })
 
     onUnmounted(() => {
       cleanup
     })
   }
+
+  if (props.showOnSearch) isSearchInputVisible.value = true
 
   selectDefaultItems()
 })

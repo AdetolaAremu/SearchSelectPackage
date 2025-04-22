@@ -1,7 +1,9 @@
 import { Option } from './Util.type'
 
+type SearchApiFunction = (searchTerm: string) => Promise<any[]>
+
 export interface IDynamicProps {
-  data: Option | any
+  data?: Option | any
   displayKey: string
   displayPrefix?: string
   selectMax?: number | null
@@ -13,4 +15,7 @@ export interface IDynamicProps {
   dynamicInputFocusBorderColor?: string
   modelValue?: any[]
   closeAfterMax?: boolean
+  searchApi?: SearchApiFunction | null
+  showOnSearch?: boolean
+  debounceApiCallBy?: number
 }
