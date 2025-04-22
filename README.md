@@ -3,7 +3,7 @@
 # vue3-search-select
 
 [![npm](https://img.shields.io/npm/v/vue3-search-select)](https://www.npmjs.com/package/vue3-search-select)
-[![GitHub license](https://img.shields.io/github/license/YOUR_USERNAME/vue3-search-select)](https://github.com/adetolaaremu/vue3-search-select/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/vue3-search-select)](https://github.com/AdetolaAremu/SearchSelectPackage/blob/master/LICENSE)
 
 A light-weight, flexible and easy-to-use Vue 3 Search and Select component that allows users to search and select options from a dynamic or static list.
 
@@ -138,6 +138,34 @@ import "vue3-search-select/Vue-Search-Select.css";
   const fullNameList = (item: Person[]) => { // show fullname after the picked
     let allItems = item?.map((obj) => `${obj.firstName} ${obj.lastName}`).join(', ')
     return allItems
+  }
+```
+
+**Another shiny use case is API - Show On Search**
+It helps when you want to keep the full list hidden by default and only show results based on what the user is actively searching for.
+
+```js
+  <DynamicMultiSelect
+    v-model="selectedUsers"
+    :data="searchResults"
+    displayKey="name"
+    primaryKey="id"
+    :showOnSearch="true" // important for this implementation
+    :searchApi="searchUsersApi" // your function where the api is being called will be here
+    :selectMax="5"
+    :debounceApiCallBy="1500" // by default this debounce is set to 1 second but it is adjustable
+  />
+
+  const selectedUsers = ref([])
+  const searchResults = ref([])
+
+  // searchUsersApi takes a search term as a parameter,
+  // the searchApi prop will take a function like this,
+  // call it and pass the search string to the parameter,
+  const searchUsersApi = async (searchTerm: string) => {
+    const response = await fetch(`https://api.github.com/search/repositories?q=${searchTerm}`)
+    const data = await response.json()
+    return (searchResults.value = data.items)
   }
 ```
 
