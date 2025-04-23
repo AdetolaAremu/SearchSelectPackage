@@ -3,7 +3,7 @@
 # vue3-search-select
 
 [![npm](https://img.shields.io/npm/v/vue3-search-select)](https://www.npmjs.com/package/vue3-search-select)
-[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/vue3-search-select)](https://github.com/AdetolaAremu/SearchSelectPackage/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/vue3-search-select)]
 
 A light-weight, flexible and easy-to-use Vue 3 Search and Select component that allows users to search and select options from a dynamic or static list.
 
@@ -107,6 +107,15 @@ Set default values to highlight recommended or commonly selected options, enhanc
 
 🚫 Auto-Close on Maximum Selection
 Automatically close the dropdown when the maximum number of selections is reached, ensuring users know their selection limit.
+
+🔍 Show on Search
+Only show dropdown options after the user starts typing, instead of displaying all options immediately. Useful when the list is long or fetched from an external source.
+
+🌐 Search with API
+Trigger an API call when the user types in the input field, instead of filtering a local array. Ideal for real-time search through a remote database.
+
+⏱️ Debounce API Call By
+Wait a specified number of milliseconds after the user stops typing before making the API call. Helps reduce the number of requests when users type quickly.
 
 ```js
 import { DynamicMultiSelect } from 'vue3-search-select'
