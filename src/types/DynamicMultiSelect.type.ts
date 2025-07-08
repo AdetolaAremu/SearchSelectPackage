@@ -18,4 +18,5 @@ export interface IDynamicProps {
   searchApi?: SearchApiFunction | null
   showOnSearch?: boolean
   debounceApiCallBy?: number
+  isDisabled?: boolean
 }

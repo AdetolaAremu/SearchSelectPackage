@@ -6,6 +6,7 @@
           @input="handleInput"
           @focus="isOpen = true"
           @blur="searchTerm = ''"
+          :disabled="isDisabled"
           v-model="searchTerm"
           id="dropdownSearchInput"
           class="inputWrapper"
@@ -70,7 +71,8 @@ const props = withDefaults(defineProps<searchSelectProps>(), {
   inputFocusBorderColor: '1px solid #6a7ada',
   primaryKey: '',
   modelValue: () => [],
-  closeAfterMax: false
+  closeAfterMax: false,
+  isDisabled: false
 })
 
 const emit = defineEmits(['update:modelValue'])

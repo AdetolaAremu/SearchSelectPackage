@@ -25,6 +25,12 @@
   outline: none;
 }
 
+.inputWrapper:disabled {
+  background: transparent;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .listContainer {
   position: absolute;
   top: 100%;
@@ -210,4 +216,16 @@
 .list-leave-to {
   opacity: 0;
   transform: translateY(10px);
+}
+
+.disabled-dropdown {
+  background: transparent;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disabled-dropdown {
+  background: transparent;
+  opacity: 0.6;
+  cursor: not-allowed;
 }

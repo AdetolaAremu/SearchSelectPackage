@@ -1,5 +1,10 @@
 <template>
-  <div class="_package_select_container" @click="openDropDown()" ref="multiDropdown">
+  <div
+    class="_package_select_container"
+    :class="[{ 'disabled-dropdown': isDisabled }, 'base-dropdown']"
+    @click="openDropDown()"
+    ref="multiDropdown"
+  >
     <div class="_dynamic_container">
       <div class="_select_placeholder_text">
         <div v-if="transformPickedItems.length !== 0">
@@ -88,7 +93,8 @@ const props = withDefaults(defineProps<IDynamicProps>(), {
   closeAfterMax: false,
   showOnSearch: false,
   searchApi: null,
-  debounceApiCallBy: 1000
+  debounceApiCallBy: 1000,
+  isDisabled: false
 })
 
 const isOpen = ref(false)
@@ -104,7 +110,11 @@ const emit = defineEmits(['update:modelValue'])
 const selectedOptionsStore = ref<Option[]>([])
 const isLoading = ref(false)
 
-const openDropDown = () => (isOpen.value = true)
+const openDropDown = () => {
+  if (props.isDisabled) return
+
+  isOpen.value = true
+}
 
 const toggleSearchInput = () => {
   isSearchInputVisible.value = !isSearchInputVisible.value
