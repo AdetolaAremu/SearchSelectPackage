@@ -8,10 +8,23 @@
   width: 100%;
 }
 
+.mainContainer.drop-select-up .listContainer {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 2px;
+}
+
+.dropdown-content {
+  max-height: 10rem;
+  overflow-y: auto;
+  width: 100%;
+}
+
 .searchContainer {
   box-shadow: #0000;
   position: relative;
   width: 100%;
+  z-index: auto;
 }
 
 .inputWrapper {
@@ -56,6 +69,7 @@
   padding: 0.5rem;
   border-radius: 0.25rem;
   position: relative;
+  z-index: 999;
 }
 
 .listBox:hover {
@@ -93,6 +107,7 @@
   padding-left: 3px;
 }
 
+/* dynamic select starts here */
 ._package_select_container {
   position: relative;
 }
@@ -152,6 +167,18 @@
   border-width: 1px #d1d5db;
   border-radius: 0.5rem;
   overflow-y: auto;
+}
+
+._package_select_container.drop-up ._dynamic_list_container {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 2px;
+}
+
+.dropdown-content {
+  max-height: 10rem;
+  overflow-y: auto;
+  width: 100%;
 }
 
 ._dynamic_list {

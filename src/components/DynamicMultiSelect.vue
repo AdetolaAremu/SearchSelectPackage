@@ -1,7 +1,7 @@
 <template>
   <div
     class="_package_select_container"
-    :class="[{ 'disabled-dropdown': isDisabled }, 'base-dropdown']"
+    :class="['base-dropdown', { 'drop-up': dropUp, 'disabled-dropdown': isDisabled }]"
     @click="openDropDown()"
     ref="multiDropdown"
   >
@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import CheckMark from '../assets/images/CheckMark.svg'
 import Search from '../assets/images/Search.svg'
 import { IDynamicProps } from '../types/DynamicMultiSelect.type'
@@ -99,6 +99,7 @@ const props = withDefaults(defineProps<IDynamicProps>(), {
 
 const isOpen = ref(false)
 const multiDropdown = ref<HTMLElement | null>(null)
+const dropUp = ref(false)
 const searchTerm = ref('')
 const selectedData = ref(
   Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
@@ -110,10 +111,23 @@ const emit = defineEmits(['update:modelValue'])
 const selectedOptionsStore = ref<Option[]>([])
 const isLoading = ref(false)
 
-const openDropDown = () => {
+const openDropDown = async () => {
   if (props.isDisabled) return
 
   isOpen.value = true
+
+  if (isOpen.value) {
+    await nextTick()
+
+    const el = multiDropdown.value
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      const spaceBelow = window.innerHeight - rect.bottom
+      const dropdownHeight = 48
+
+      dropUp.value = spaceBelow < dropdownHeight
+    }
+  }
 }
 
 const toggleSearchInput = () => {

@@ -1,10 +1,14 @@
 <template>
   <div>
-    <div class="mainContainer" ref="dropdown">
+    <div
+      class="mainContainer"
+      ref="dropdown"
+      :class="[{ 'drop-select-up': dropUp }, 'base-dropdown']"
+    >
       <div :class="{ 'z-10': isOpen }" id="dropdownSearch" class="searchContainer">
         <input
           @input="handleInput"
-          @focus="isOpen = true"
+          @focus="openDropDown"
           @blur="searchTerm = ''"
           :disabled="isDisabled"
           v-model="searchTerm"
@@ -41,6 +45,7 @@
                 type="checkbox"
                 :value="option"
                 class="listInput"
+                @click.stop
               />
               <label :for="'checkbox-item-' + index" class="listInputLabel">
                 {{ getDisplayValue(option, displayKey) }}
@@ -54,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { searchSelectProps } from '../types/SearchSelect.type'
 import { Option } from '../types/Util.type'
 import { getDisplayValue } from '../util/Helper'
@@ -83,6 +88,26 @@ const selectedData = ref(
 const searchTerm = ref('')
 const isOpen = ref(false)
 const dropdown = ref<HTMLElement | null>(null)
+const dropUp = ref(false)
+
+const openDropDown = async () => {
+  if (props.isDisabled) return
+
+  isOpen.value = true
+
+  if (isOpen.value) {
+    await nextTick()
+
+    const el = dropdown.value
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      const spaceBelow = window.innerHeight - rect.bottom
+      const dropdownHeight = 48
+
+      dropUp.value = spaceBelow < dropdownHeight
+    }
+  }
+}
 
 const selectDefaultItems = () => {
   if (props.defaultValue) {
