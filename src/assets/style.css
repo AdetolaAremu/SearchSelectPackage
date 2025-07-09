@@ -69,7 +69,6 @@
   padding: 0.5rem;
   border-radius: 0.25rem;
   position: relative;
-  z-index: 999;
 }
 
 .listBox:hover {
