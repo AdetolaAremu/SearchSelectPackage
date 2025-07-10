@@ -5,14 +5,14 @@
       ref="dropdown"
       :class="[{ 'drop-select-up': dropUp }, 'base-dropdown']"
     >
-      <div :class="{ 'z-10': isOpen }" id="dropdownSearch" class="searchContainer">
+      <div :class="{ 'z-10': isOpen }" :id="`${componentId}-search`" class="searchContainer">
         <input
           @input="handleInput"
           @focus="openDropDown"
           @blur="searchTerm = ''"
           :disabled="isDisabled"
           v-model="searchTerm"
-          id="dropdownSearchInput"
+          :id="`${componentId}-search`"
           class="inputWrapper"
           :style="{ border: inputStyles }"
           type="text"
@@ -29,7 +29,7 @@
         <ul
           v-show="isOpen && filteredData.length > 0"
           class="listContainer"
-          aria-labelledby="dropdownSearchInput"
+          :aria-labelledby="`${componentId}-input`"
           :style="{ 'background-color': listBackgroundColor }"
         >
           <li v-for="(option, index) in filteredData" :key="index">
@@ -41,13 +41,13 @@
                   !selectedData.includes(option)
                 "
                 v-model="selectedData"
-                :id="'checkbox-item-' + index"
+                :id="`${componentId}-checkbox-${index}`"
                 type="checkbox"
                 :value="option"
                 class="listInput"
                 @click.stop
               />
-              <label :for="'checkbox-item-' + index" class="listInputLabel">
+              <label :for="`${componentId}-checkbox-${index}`" class="listInputLabel">
                 {{ getDisplayValue(option, displayKey) }}
               </label>
             </div>
@@ -89,6 +89,7 @@ const searchTerm = ref('')
 const isOpen = ref(false)
 const dropdown = ref<HTMLElement | null>(null)
 const dropUp = ref(false)
+const componentId = ref('dropdown-' + Math.random().toString(36).substring(2, 10))
 
 const openDropDown = async () => {
   if (props.isDisabled) return
