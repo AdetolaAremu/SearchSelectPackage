@@ -3,7 +3,7 @@
 # vue3-search-select
 
 [![npm](https://img.shields.io/npm/v/vue3-search-select)](https://www.npmjs.com/package/vue3-search-select)
-[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/vue3-search-select)](https://github.com/AdetolaAremu/SearchSelectPackage/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/SearchSelectPackage)](https://github.com/AdetolaAremu/SearchSelectPackage/blob/master/LICENSE)
 
 A light-weight, flexible and easy-to-use Vue 3 Search and Select component that allows users to search and select options from a dynamic or static list.
 
