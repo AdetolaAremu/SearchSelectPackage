@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [1.2.0] - 2025-04-10
+## [1.0.11] - 2025-04-10
 
 ### Added
 
@@ -20,3 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Fixed the Regex to filter display key.
 
 ---
+
+## [1.0.12] - 2025-07-10
+
+### Added
+
+- Feature to disable both SearchSelect and DyamicSearchSelect, the prop name is "isDisabled".
+- Implemented a feature to detect available space below the SearchSelect and DynamicSearchSelect components. If the space is less than 10rem, the dropdown is automatically displayed above instead of below to maintain visibility and prevent overflow issues.
+
+### Fixed
+
+- Previously, using multiple SearchSelect components within the same parent component or Vue file caused conflicts. This issue has now been resolved, allowing multiple instances to coexist without errors.

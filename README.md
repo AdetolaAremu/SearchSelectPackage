@@ -249,10 +249,11 @@ _EXAMPLE_
 | Prop                         | Description                                                                                           | Default Value     |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------- |
 | dynamicListBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
-| debounceApiCallBy            | Debounce API calls                                                                                    | 1000 (ms)         |
+| debounceApiCallBy            | Debounce API calls in DynamicMultiSelect                                                              | 1000 (ms)         |
 | dynamicInputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
 | dynamicInputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
 | closeAfterMax                | Close the selection field once the selectMax condition/count specified is met.                        | false             |
+| isDisabled                   | Use this to disable both SearchSelect and DynamicMultiSelect                                          | false             |
 
 ### License
 

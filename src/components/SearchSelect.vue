@@ -124,23 +124,23 @@ const selectDefaultItems = () => {
   }
 }
 
+const clearSelection = () => {
+  selectedData.value = []
+}
+
 watch(
   () => props.modelValue,
   (newValue) => {
+    if (!Array.isArray(newValue)) return
+
     // we need to make sure data have been selected initially, so we can avoid initialization issue
-    if (selectedData.value.length) {
-      if (!newValue.length) {
-        // once we detect v-model from parent is empty, we need clear selection
-        clearSelection()
-      }
+    if (selectedData.value.length && newValue.length === 0) {
+      // once we detect v-model from parent is empty, we need clear selection
+      clearSelection()
     }
   },
   { immediate: true }
 )
-
-const clearSelection = () => {
-  selectedData.value = []
-}
 
 watch(
   () => props.primaryKey,
