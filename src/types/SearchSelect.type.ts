@@ -10,6 +10,13 @@ export interface searchSelectProps {
   inputBorderColour?: string
   inputFocusBorderColor?: string
   primaryKey: string | number
-  modelValue: any[]
+  isDisabled?: boolean // new
+  modelValue?: string[] | number[] | Option[]
   closeAfterMax?: boolean
 }
+// <SearchSelect
+//       :data="pseudoEmployeeData"
+//       displayKey="firstName lastName department | employeeId"
+//       v-model="employee"
+//       primaryKey="firstName"
+//     />

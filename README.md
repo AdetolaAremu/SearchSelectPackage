@@ -3,7 +3,7 @@
 # vue3-search-select
 
 [![npm](https://img.shields.io/npm/v/vue3-search-select)](https://www.npmjs.com/package/vue3-search-select)
-[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/vue3-search-select)](https://github.com/AdetolaAremu/SearchSelectPackage/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/AdetolaAremu/SearchSelectPackage)](https://github.com/AdetolaAremu/SearchSelectPackage/blob/master/LICENSE)
 
 A light-weight, flexible and easy-to-use Vue 3 Search and Select component that allows users to search and select options from a dynamic or static list.
 
@@ -38,19 +38,19 @@ Check out the [live demonstration](https://search-select.netlify.app/) to see th
 
 ✨ Key Features
 
-🗂 Custom Display Order
+🗂 Custom Display Order -
 Arrange options in any order, helping users easily find frequently selected or high-priority items.
 
-🔢 Conditional Count Display
+🔢 Conditional Count Display -
 Display options dynamically based on specific conditions, so users see only relevant choices.
 
-🔍 Search Functionality
+🔍 Search Functionality -
 Integrated search allows users to quickly filter options by typing, ideal for large lists.
 
-🔑 Primary Key Tracking
+🔑 Primary Key Tracking -
 Each option is linked to a unique identifier (primary key), ensuring accurate selection and tracking of values.
 
-⭐ Default Value Selection
+⭐ Default Value Selection -
 Pre-select default values to highlight the most relevant choice, improving the initial user experience.
 
 ## Search Select Usage
@@ -81,32 +81,41 @@ The DynamicMultiSelect component is packed with advanced functionality, allowing
 
 🚀 Key Features
 
-🎛️ Slot Manipulation
+🎛️ Slot Manipulation -
 Customize component slots to control how each item selected will be displayed, allowing for unique visual arrangements.
 
-🔍 Show Results on Search (optional)
+🔍 Show Results on Search (optional) -
 Can display search results when users begin typing, keeping the interface clean and focused until needed.
 
-🗂️ Custom Display Order
+🗂️ Custom Display Order -
 Easily reorder options to prioritize frequently selected or high-importance items at the top of the list.
 
-🔑 Primary Key Tracking
+🔑 Primary Key Tracking -
 Each item is uniquely identified by a primary key, ensuring consistent data handling and accurate selections.
 
-🔢 Conditional Count Display
+🔢 Conditional Count Display -
 Apply conditions to dynamically control the visibility of options based on specific counts, improving list relevance.
 
-🔍 Multi-Select Search
+🔍 Multi-Select Search -
 Built-in search functionality enables users to filter multiple selections, making large lists more manageable.
 
-🖼️ Image Prefix for Options
+🖼️ Image Prefix for Options -
 Add an image prefix to each list option, creating a visually rich experience and making options more recognizable.
 
-⭐ Default Value Selection
+⭐ Default Value Selection -
 Set default values to highlight recommended or commonly selected options, enhancing the user experience from the start.
 
-🚫 Auto-Close on Maximum Selection
+🚫 Auto-Close on Maximum Selection -
 Automatically close the dropdown when the maximum number of selections is reached, ensuring users know their selection limit.
+
+🔍 Show on Search -
+Only show dropdown options after the user starts typing, instead of displaying all options immediately. Useful when the list is long or fetched from an external source.
+
+🌐 Search with API -
+Trigger an API call when the user types in the input field, instead of filtering a local array. Ideal for real-time search through a remote database.
+
+⏱️ Debounce API Call By -
+Waiting a specified number of milliseconds after the user stops typing before making the API call. Helps reduce the number of requests when users type quickly.
 
 ```js
 import { DynamicMultiSelect } from 'vue3-search-select'
@@ -240,10 +249,11 @@ _EXAMPLE_
 | Prop                         | Description                                                                                           | Default Value     |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------- |
 | dynamicListBackgroundColor   | This is the background of the dropdown list.                                                          | #e5e7eb           |
-| debounceApiCallBy            | Debounce API calls                                                                                    | 1000 (ms)         |
+| debounceApiCallBy            | Debounce API calls in DynamicMultiSelect                                                              | 1000 (ms)         |
 | dynamicInputBorderColour     | This is the input border colour.                                                                      | 1px solid gray    |
 | dynamicInputFocusBorderColor | When the input is active or focused on, what colour do you want to show. this is where to specify it. | 1px solid #6a7ada |
 | closeAfterMax                | Close the selection field once the selectMax condition/count specified is met.                        | false             |
+| isDisabled                   | Use this to disable both SearchSelect and DynamicMultiSelect                                          | false             |
 
 ### License
 

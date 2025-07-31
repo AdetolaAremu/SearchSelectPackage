@@ -1,5 +1,10 @@
 <template>
-  <div class="_package_select_container" @click="openDropDown()" ref="multiDropdown">
+  <div
+    class="_package_select_container"
+    :class="['base-dropdown', { 'drop-up': dropUp, 'disabled-dropdown': isDisabled }]"
+    @click="openDropDown()"
+    ref="multiDropdown"
+  >
     <div class="_dynamic_container">
       <div class="_select_placeholder_text">
         <div v-if="transformPickedItems.length !== 0">
@@ -69,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import CheckMark from '../assets/images/CheckMark.svg'
 import Search from '../assets/images/Search.svg'
 import { IDynamicProps } from '../types/DynamicMultiSelect.type'
@@ -88,11 +93,13 @@ const props = withDefaults(defineProps<IDynamicProps>(), {
   closeAfterMax: false,
   showOnSearch: false,
   searchApi: null,
-  debounceApiCallBy: 1000
+  debounceApiCallBy: 1000,
+  isDisabled: false
 })
 
 const isOpen = ref(false)
 const multiDropdown = ref<HTMLElement | null>(null)
+const dropUp = ref(false)
 const searchTerm = ref('')
 const selectedData = ref(
   Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
@@ -104,7 +111,24 @@ const emit = defineEmits(['update:modelValue'])
 const selectedOptionsStore = ref<Option[]>([])
 const isLoading = ref(false)
 
-const openDropDown = () => (isOpen.value = true)
+const openDropDown = async () => {
+  if (props.isDisabled) return
+
+  isOpen.value = true
+
+  if (isOpen.value) {
+    await nextTick()
+
+    const el = multiDropdown.value
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      const spaceBelow = window.innerHeight - rect.bottom
+      const dropdownHeight = 48
+
+      dropUp.value = spaceBelow < dropdownHeight
+    }
+  }
+}
 
 const toggleSearchInput = () => {
   isSearchInputVisible.value = !isSearchInputVisible.value

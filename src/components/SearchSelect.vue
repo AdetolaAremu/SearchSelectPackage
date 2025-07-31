@@ -1,13 +1,18 @@
 <template>
   <div>
-    <div class="mainContainer" ref="dropdown">
-      <div :class="{ 'z-10': isOpen }" id="dropdownSearch" class="searchContainer">
+    <div
+      class="mainContainer"
+      ref="dropdown"
+      :class="[{ 'drop-select-up': dropUp }, 'base-dropdown']"
+    >
+      <div :class="{ 'z-10': isOpen }" :id="`${componentId}-search`" class="searchContainer">
         <input
           @input="handleInput"
-          @focus="isOpen = true"
+          @focus="openDropDown"
           @blur="searchTerm = ''"
+          :disabled="isDisabled"
           v-model="searchTerm"
-          id="dropdownSearchInput"
+          :id="`${componentId}-search`"
           class="inputWrapper"
           :style="{ border: inputStyles }"
           type="text"
@@ -24,7 +29,7 @@
         <ul
           v-show="isOpen && filteredData.length > 0"
           class="listContainer"
-          aria-labelledby="dropdownSearchInput"
+          :aria-labelledby="`${componentId}-input`"
           :style="{ 'background-color': listBackgroundColor }"
         >
           <li v-for="(option, index) in filteredData" :key="index">
@@ -36,12 +41,13 @@
                   !selectedData.includes(option)
                 "
                 v-model="selectedData"
-                :id="'checkbox-item-' + index"
+                :id="`${componentId}-checkbox-${index}`"
                 type="checkbox"
                 :value="option"
                 class="listInput"
+                @click.stop
               />
-              <label :for="'checkbox-item-' + index" class="listInputLabel">
+              <label :for="`${componentId}-checkbox-${index}`" class="listInputLabel">
                 {{ getDisplayValue(option, displayKey) }}
               </label>
             </div>
@@ -53,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { searchSelectProps } from '../types/SearchSelect.type'
 import { Option } from '../types/Util.type'
 import { getDisplayValue } from '../util/Helper'
@@ -70,7 +76,8 @@ const props = withDefaults(defineProps<searchSelectProps>(), {
   inputFocusBorderColor: '1px solid #6a7ada',
   primaryKey: '',
   modelValue: () => [],
-  closeAfterMax: false
+  closeAfterMax: false,
+  isDisabled: false
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -81,6 +88,27 @@ const selectedData = ref(
 const searchTerm = ref('')
 const isOpen = ref(false)
 const dropdown = ref<HTMLElement | null>(null)
+const dropUp = ref(false)
+const componentId = ref('dropdown-' + Math.random().toString(36).substring(2, 10))
+
+const openDropDown = async () => {
+  if (props.isDisabled) return
+
+  isOpen.value = true
+
+  if (isOpen.value) {
+    await nextTick()
+
+    const el = dropdown.value
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      const spaceBelow = window.innerHeight - rect.bottom
+      const dropdownHeight = 48
+
+      dropUp.value = spaceBelow < dropdownHeight
+    }
+  }
+}
 
 const selectDefaultItems = () => {
   if (props.defaultValue) {
@@ -96,23 +124,23 @@ const selectDefaultItems = () => {
   }
 }
 
+const clearSelection = () => {
+  selectedData.value = []
+}
+
 watch(
   () => props.modelValue,
   (newValue) => {
+    if (!Array.isArray(newValue)) return
+
     // we need to make sure data have been selected initially, so we can avoid initialization issue
-    if (selectedData.value.length) {
-      if (!newValue.length) {
-        // once we detect v-model from parent is empty, we need clear selection
-        clearSelection()
-      }
+    if (selectedData.value.length && newValue.length === 0) {
+      // once we detect v-model from parent is empty, we need clear selection
+      clearSelection()
     }
   },
   { immediate: true }
 )
-
-const clearSelection = () => {
-  selectedData.value = []
-}
 
 watch(
   () => props.primaryKey,
